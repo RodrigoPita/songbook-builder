@@ -57,7 +57,7 @@ const App = () => {
                     <div className="mt-6 p-4 bg-gray-50 rounded-lg">
                         <h3 className="font-semibold text-gray-800 mb-2">Tips:</h3>
                         <ul className="text-sm text-gray-600 space-y-1">
-                            <li>• Check if the file <code className="bg-gray-200 px-1 rounded">public/charts/index.json</code> exists</li>
+                            <li>• Check if the file <code className="bg-gray-200 px-1 rounded">public/index.json</code> exists</li>
                             <li>• Check if the .cho files are in the folder <code className="bg-gray-200 px-1 rounded">public/charts/</code></li>
                             <li>• Check the browser console for more details</li>
                         </ul>

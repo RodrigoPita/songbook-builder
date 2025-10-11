@@ -22,7 +22,7 @@ export function useSongbook() {
             setLoading(true);
             setError(null);
 
-            const indexPath = `${import.meta.env.BASE_URL}charts/index.json`;
+            const indexPath = `${import.meta.env.BASE_URL}index.json`;
             console.log('Loading metadata from:', indexPath);
 
             const response = await fetch(indexPath);
