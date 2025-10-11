@@ -56,7 +56,7 @@ const SongbookPreview = ({
                             <div className="flex items-center justify-end mb-2 print:hidden space-x-2">
                                 <label className="text-sm font-medium text-gray-600">Transpose (semitones):</label>
                                 <button
-                                    onClick={() => onShiftChange(song.id, -1)}
+                                    onClick={() => onShiftChange(song.id, (semitoneShift[song.id] || 0) - 1)}
                                     disabled={(semitoneShift[song.id] || 0) <= -11}
                                     className="p-2 border border-gray-300 rounded-full bg-white text-gray-600 hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed transition"
                                 >
@@ -70,7 +70,7 @@ const SongbookPreview = ({
                                     {semitoneShift[song.id] || 0}
                                 </span>
                                 <button
-                                    onClick={() => onShiftChange(song.id, 1)}
+                                    onClick={() => onShiftChange(song.id, (semitoneShift[song.id] || 0) + 1)}
                                     disabled={(semitoneShift[song.id] || 0) >= 11}
                                     className="p-2 border border-gray-300 rounded-full bg-white text-gray-600 hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed transition"
                                 >
@@ -78,7 +78,7 @@ const SongbookPreview = ({
                                 </button>
                                 {/* Reset Transposition Button */}
                                 <button
-                                    onClick={() => onShiftChange(song.id, - (semitoneShift[song.id] || 0))}
+                                    onClick={() => onShiftChange(song.id, 0)}
                                     disabled={(semitoneShift[song.id] || 0) === 0}
                                     className={`ml-2 p-2 border border-red-300 rounded-full bg-red-50 text-red-600 transition shadow-sm
                                         ${ (semitoneShift[song.id] || 0) === 0 ? 'opacity-50 cursor-not-allowed' : 'hover:bg-red-100' }

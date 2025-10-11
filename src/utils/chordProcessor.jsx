@@ -21,9 +21,7 @@ export const processChordProSimple = (content, originalKey, semitoneShift) => {
             // Key directive - show discreetly
             if (directive === 'key') {
                 processedElements.push(
-                    <p key={`key-${lineIndex}`} className="text-xs text-gray-400 mt-2 mb-1 print:hidden">
-                        {`{key: ${targetKey}}`}
-                    </p>
+                    <p key={`key-${lineIndex}`} className="text-xs text-gray-400 mt-2 mb-1 print:hidden"></p>
                 );
             }
             // Ignore title and artist directives (shown in header)
