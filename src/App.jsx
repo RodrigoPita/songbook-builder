@@ -6,7 +6,7 @@ import SongbookPreview from './components/SongbookPreview';
 
 const App = () => {
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-    
+
     const {
         allSongs,
         selectedSongs,
@@ -15,6 +15,9 @@ const App = () => {
         setSearchTerm,
         toggleSongSelection,
         handleShiftChange,
+        resetTransposition,
+        incrementTransposition,
+        decrementTransposition,
         filteredSongs,
         loading,
         error,
@@ -26,37 +29,37 @@ const App = () => {
         window.print();
     };
 
-    // Estado de loading inicial
+    // Initial loading state
     if (loading) {
         return (
             <div className="min-h-screen bg-gray-50 flex items-center justify-center">
                 <div className="text-center">
                     <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-green-600 mx-auto mb-4"></div>
-                    <p className="text-gray-600">Carregando songbook...</p>
+                    <p className="text-gray-600">Loading songbook...</p>
                 </div>
             </div>
         );
     }
 
-    // Estado de erro
+    // Error state
     if (error) {
         return (
             <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4">
                 <div className="max-w-md w-full bg-white rounded-lg shadow-lg p-6">
-                    <h2 className="text-xl font-bold text-red-600 mb-4">Erro ao carregar músicas</h2>
+                    <h2 className="text-xl font-bold text-red-600 mb-4">Error loading songs</h2>
                     <p className="text-gray-700 mb-4">{error}</p>
                     <button
                         onClick={reloadSongs}
                         className="w-full bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition-colors"
                     >
-                        Tentar novamente
+                        Try again
                     </button>
                     <div className="mt-6 p-4 bg-gray-50 rounded-lg">
-                        <h3 className="font-semibold text-gray-800 mb-2">Dicas:</h3>
+                        <h3 className="font-semibold text-gray-800 mb-2">Tips:</h3>
                         <ul className="text-sm text-gray-600 space-y-1">
-                            <li>• Verifique se o arquivo <code className="bg-gray-200 px-1 rounded">public/charts/index.json</code> existe</li>
-                            <li>• Verifique se os arquivos .cho estão na pasta <code className="bg-gray-200 px-1 rounded">public/charts/</code></li>
-                            <li>• Veja o console do navegador para mais detalhes</li>
+                            <li>• Check if the file <code className="bg-gray-200 px-1 rounded">public/charts/index.json</code> exists</li>
+                            <li>• Check if the .cho files are in the folder <code className="bg-gray-200 px-1 rounded">public/charts/</code></li>
+                            <li>• Check the browser console for more details</li>
                         </ul>
                     </div>
                 </div>
