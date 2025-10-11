@@ -39,6 +39,7 @@ export function useSongbook() {
         id: song.id,
         title: song.title,
         artist: song.artist || '',
+        key: song.key || '', // Tom original vindo do index.json
         filename: song.filename,
         content: null // Será carregado sob demanda
       }));
@@ -51,6 +52,13 @@ export function useSongbook() {
     } finally {
       setLoading(false);
     }
+  };
+
+  // Extrai a key (tom) do conteúdo ChordPro
+  const extractKeyFromContent = (content) => {
+    // Procura por {key: X} ou {k: X} no formato ChordPro
+    const keyMatch = content.match(/\{(?:key|k):\s*([A-G][#b]?m?)\}/i);
+    return keyMatch ? keyMatch[1] : null;
   };
 
   // Carrega o conteúdo de uma música específica
@@ -78,10 +86,20 @@ export function useSongbook() {
       
       const content = await response.text();
       
+      // Extrai a key do conteúdo
+      const key = extractKeyFromContent(content);
+      
+      // Atualiza o allSongs com a key extraída
+      setAllSongs(prev => prev.map(s => 
+        s.id === songId ? { ...s, key } : s
+      ));
+      
       setSongsContent(prev => ({
         ...prev,
         [songId]: content
       }));
+      
+      console.log(`Música ${song.title} carregada. Tom original: ${key || 'não encontrado'}`);
       
       return content;
       
@@ -147,6 +165,7 @@ export function useSongbook() {
           id: song.id,
           title: song.title,
           artist: song.artist,
+          key: song.key || '', // Tom original
           content: songsContent[id] || '', // Conteúdo pode estar sendo carregado
           transposition: semitoneShift[id] || 0
         };
