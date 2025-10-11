@@ -9,18 +9,24 @@ import {
 
 // 1. Extracts Root, Quality, Modifier, and Bass.
 export function getBaseChordInfo(chord) {
-    const parts = chord.split('/');
+    let processedChord = chord.trim();
+    const optionalParenMatch = processedChord.match(/^\((.*)\)$/);
+    if (optionalParenMatch) {
+        processedChord = optionalParenMatch[1];
+    }
+
+    const parts = processedChord.split('/');
     const mainChord = parts[0];
     const bassNote = parts.length > 1 ? parts[1].trim() : null;
 
     const match = mainChord.match(/^([A-G][#b]?)(m|dim|maj)?/i);
-    if (!match) return { root: null, quality: '', modifier: '', bassNote };
+    if (!match) return { root: null, quality: '', modifier: '', bassNote, originalParen: optionalParenMatch !== null };
 
     const root = match[1];
     let quality = match[2] || '';
     const modifier = mainChord.substring(match[0].length);
 
-    return { root, quality: quality.toLowerCase(), modifier, bassNote };
+    return { root, quality: quality.toLowerCase(), modifier, bassNote, originalParen: optionalParenMatch !== null };
 }
 
 // 2. Determines the new key (for display and notation only)
@@ -141,6 +147,11 @@ export const transposeChord = (chord, originalKey, semitoneShift) => {
             finalChord += `/${newBassNote}`;
         }
     }
-    
+
+    // Re-add parentheses if the original chord had them
+    if (chordInfo.originalParen) {
+        finalChord = `(${finalChord})`;
+    }
+
     return finalChord;
 };
