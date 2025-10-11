@@ -10,6 +10,8 @@ export const processChordProSimple = (content, originalKey, semitoneShift) => {
     const CHORD_LINE_REGEX = /(\[.*?\])([^\[]*)/g;
     const DIRECTIVE_REGEX = /\{([^:}]+):?([^}]*)\}/;
 
+    let inChorus = false;
+
     lines.forEach((line, lineIndex) => {
         const trimmedLine = line.trim();
 
@@ -17,12 +19,18 @@ export const processChordProSimple = (content, originalKey, semitoneShift) => {
         const directiveMatch = trimmedLine.match(DIRECTIVE_REGEX);
         if (directiveMatch) {
             const directive = directiveMatch[1].toLowerCase().trim();
+            const value = directiveMatch[2].trim();
 
             // Key directive - show discreetly
             if (directive === 'key') {
                 processedElements.push(
                     <p key={`key-${lineIndex}`} className="text-xs text-gray-400 mt-2 mb-1 print:hidden"></p>
                 );
+            } else if (directive === 'start_of_chorus' || directive === 'soc') { // 'soc' é um alias comum
+                inChorus = true;
+            } else if (directive === 'end_of_chorus' || directive === 'eoc') { // 'eoc' é um alias comum
+                inChorus = false;
+                // processedElements.push(<div key={`eoc-${lineIndex}`} className="h-4"></div>);
             }
             // Ignore title and artist directives (shown in header)
             // Ignore all other directives (start_of_verse, end_of_chorus, etc.)
@@ -67,20 +75,19 @@ export const processChordProSimple = (content, originalKey, semitoneShift) => {
             }
 
             // If line had chords or just lyrics
-            if (matches.length > 0 || trimmedLine.length > 0) {
-                if (matches.length === 0) {
-                    lyricLine = trimmedLine;
-                    chordLine = ' '.repeat(trimmedLine.length);
-                }
-
-                processedElements.push(
-                    <ChordProLine
-                        key={`content-${lineIndex}`}
-                        chordLine={chordLine}
-                        lyricLine={lyricLine}
-                    />
-                );
+            if (matches.length === 0) {
+                lyricLine = trimmedLine;
+                chordLine = ' '.repeat(trimmedLine.length);
             }
+
+            processedElements.push(
+                <ChordProLine
+                    key={`content-${lineIndex}`}
+                    chordLine={chordLine}
+                    lyricLine={lyricLine}
+                    inChorus={inChorus}
+                />
+            );
         } else {
             // Empty line, keep spacing
             processedElements.push(<div key={`empty-${lineIndex}`} className="h-4"></div>);

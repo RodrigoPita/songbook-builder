@@ -4,28 +4,22 @@
  * @param {object} props - The component props.
  * @param {string} props.chordLine - The string containing chords and spaces for alignment.
  * @param {string} props.lyricLine - The string containing the song lyrics for this line.
+ * @param {boolean} props.inChorus - Indicates if the current line is part of a chorus section.
  */
-const ChordProLine = ({ chordLine, lyricLine }) => {
+const ChordProLine = ({ chordLine, lyricLine, inChorus }) => {
     // If the line is completely empty, render a spacer div to maintain vertical rhythm.
     if (!chordLine && !lyricLine) return <div className="h-4"></div>;
 
+    const chordClass = `chord-line text-base sm:text-lg text-emerald-600 font-extrabold m-0 p-0 overflow-visible print:text-base`;
+    const lyricClass = `text-gray-800 ${inChorus ? 'font-bold' : ''}`;
+
     return (
         // Container for a single line of lyrics and chords.
-        <div className="chord-pro-line font-mono text-sm sm:text-base leading-relaxed break-words print:text-sm">
-            {/* The chord line, using a <pre> tag to respect all whitespace for alignment. */}
-            <pre
-                className="chord-line text-base sm:text-lg text-emerald-600 font-extrabold m-0 p-0 overflow-visible print:text-base"
-                style={{ height: '1.4rem', lineHeight: '1', fontFamily: 'monospace' }}
-            >
-                {chordLine}
-            </pre>
-            {/* The lyric line, with a negative margin to sit snugly under the chords. */}
-            <div
-                className="lyric-line text-gray-800 m-0 p-0"
-                style={{ marginTop: '-0.3rem', lineHeight: '1.5' }}
-            >
-                {lyricLine}
-            </div>
+        <div className={`whitespace-pre-wrap font-mono leading-relaxed print:text-sm print:leading-normal ${inChorus ? 'print:font-bold' : ''}`}>
+            {/* Linha de acordes: sempre negrito, talvez maior */}
+            <pre className={chordClass} style={{ height: '1.4rem', lineHeight: '1', fontFamily: 'monospace' }}>{chordLine}</pre>
+            {/* Linha de letras: negrito apenas se for refrão */}
+            <pre className={lyricClass} style={{ marginTop: '-0.3rem', lineHeight: '1.5' }}>{lyricLine}</pre>
         </div>
     );
 };
