@@ -28,9 +28,10 @@ export const processChordProSimple = (content, originalKey, semitoneShift) => {
                 );
             } else if (directive === 'start_of_chorus' || directive === 'soc') { // 'soc' é um alias comum
                 inChorus = true;
+                processedElements.push(<div key={`soc-${lineIndex}`} className="h-4"></div>);
             } else if (directive === 'end_of_chorus' || directive === 'eoc') { // 'eoc' é um alias comum
                 inChorus = false;
-                // processedElements.push(<div key={`eoc-${lineIndex}`} className="h-4"></div>);
+                processedElements.push(<div key={`eoc-${lineIndex}`} className="h-4"></div>);
             }
             // Ignore title and artist directives (shown in header)
             // Ignore all other directives (start_of_verse, end_of_chorus, etc.)
