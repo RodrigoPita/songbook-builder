@@ -1,200 +1,227 @@
 import { useState, useEffect, useMemo, useCallback } from 'react';
 
 export function useSongbook() {
-  // Estado para músicas e carregamento
-  const [allSongs, setAllSongs] = useState([]);
-  const [songsContent, setSongsContent] = useState({});
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-  
-  // Estados da UI (mantém a mesma interface do hook original)
-  const [selectedSongIds, setSelectedSongIds] = useState([]);
-  const [semitoneShift, setSemitoneShift] = useState({});
-  const [searchTerm, setSearchTerm] = useState('');
+    // State for songs and loading
+    const [allSongs, setAllSongs] = useState([]);
+    const [songsContent, setSongsContent] = useState({});
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
 
-  // Carrega os metadados ao iniciar
-  useEffect(() => {
-    loadSongsMetadata();
-  }, []);
+    // UI states (maintains the same interface as the original hook)
+    const [selectedSongIds, setSelectedSongIds] = useState([]);
+    const [semitoneShift, setSemitoneShift] = useState({});
+    const [searchTerm, setSearchTerm] = useState('');
 
-  const loadSongsMetadata = async () => {
-    try {
-      setLoading(true);
-      setError(null);
-      
-      const indexPath = `${import.meta.env.BASE_URL}charts/index.json`;
-      console.log('Carregando metadados de:', indexPath);
-      
-      const response = await fetch(indexPath);
-      
-      if (!response.ok) {
-        throw new Error(`Erro ${response.status}: Não foi possível carregar o index.json`);
-      }
-      
-      const metadata = await response.json();
-      console.log('Metadados carregados:', metadata);
-      
-      // Transforma os metadados no formato esperado pelo app
-      const songs = metadata.map(song => ({
-        id: song.id,
-        title: song.title,
-        artist: song.artist || '',
-        key: song.key || '', // Tom original vindo do index.json
-        filename: song.filename,
-        content: null // Será carregado sob demanda
-      }));
-      
-      setAllSongs(songs);
-      
-    } catch (err) {
-      console.error('Erro ao carregar metadados:', err);
-      setError(err.message);
-    } finally {
-      setLoading(false);
-    }
-  };
+    // Load metadata on mount
+    useEffect(() => {
+        loadSongsMetadata();
+    }, []);
 
-  // Extrai a key (tom) do conteúdo ChordPro
-  const extractKeyFromContent = (content) => {
-    // Procura por {key: X} ou {k: X} no formato ChordPro
-    const keyMatch = content.match(/\{(?:key|k):\s*([A-G][#b]?m?)\}/i);
-    return keyMatch ? keyMatch[1] : null;
-  };
+    const loadSongsMetadata = async () => {
+        try {
+            setLoading(true);
+            setError(null);
 
-  // Carrega o conteúdo de uma música específica
-  const loadSongContent = useCallback(async (songId) => {
-    // Se já está carregado, não carrega novamente
-    if (songsContent[songId]) {
-      return songsContent[songId];
-    }
+            const indexPath = `${import.meta.env.BASE_URL}charts/index.json`;
+            console.log('Loading metadata from:', indexPath);
 
-    const song = allSongs.find(s => s.id === songId);
-    if (!song) {
-      console.error(`Música ${songId} não encontrada`);
-      return null;
-    }
+            const response = await fetch(indexPath);
 
-    try {
-      const songPath = `${import.meta.env.BASE_URL}charts/${song.filename}`;
-      console.log(`Carregando conteúdo de ${song.title}:`, songPath);
-      
-      const response = await fetch(songPath);
-      
-      if (!response.ok) {
-        throw new Error(`Erro ao carregar ${song.filename}`);
-      }
-      
-      const content = await response.text();
-      
-      // Extrai a key do conteúdo
-      const key = extractKeyFromContent(content);
-      
-      // Atualiza o allSongs com a key extraída
-      setAllSongs(prev => prev.map(s => 
-        s.id === songId ? { ...s, key } : s
-      ));
-      
-      setSongsContent(prev => ({
-        ...prev,
-        [songId]: content
-      }));
-      
-      console.log(`Música ${song.title} carregada. Tom original: ${key || 'não encontrado'}`);
-      
-      return content;
-      
-    } catch (err) {
-      console.error(`Erro ao carregar música ${songId}:`, err);
-      return null;
-    }
-  }, [allSongs, songsContent]);
+            if (!response.ok) {
+                throw new Error(`Error ${response.status}: Could not load index.json`);
+            }
 
-  // Toggle seleção de música
-  const toggleSongSelection = useCallback(async (songId) => {
-    setSelectedSongIds(prev => {
-      const isSelected = prev.includes(songId);
-      
-      if (isSelected) {
-        // Desseleciona
-        return prev.filter(id => id !== songId);
-      } else {
-        // Seleciona e carrega o conteúdo
-        loadSongContent(songId);
-        return [...prev, songId];
-      }
-    });
+            const metadata = await response.json();
+            console.log('Metadata loaded:', metadata);
 
-    // Inicializa a transposição em 0
-    if (!semitoneShift[songId]) {
-      setSemitoneShift(prev => ({
-        ...prev,
-        [songId]: 0
-      }));
-    }
-  }, [semitoneShift, loadSongContent]);
+            // Transform metadata to the format expected by the app
+            const songs = metadata.map(song => ({
+                id: song.id,
+                title: song.title,
+                artist: song.artist || '',
+                key: song.key || '', // Original key from index.json
+                filename: song.filename,
+                content: null // Will be loaded on demand
+            }));
 
-  // Atualiza a transposição de uma música
-  const handleShiftChange = useCallback((songId, newShift) => {
-    setSemitoneShift(prev => ({
-      ...prev,
-      [songId]: newShift
-    }));
-  }, []);
+            setAllSongs(songs);
 
-  // Músicas filtradas pela busca
-  const filteredSongs = useMemo(() => {
-    if (!searchTerm.trim()) {
-      return allSongs;
-    }
+        } catch (err) {
+            console.error('Error loading metadata:', err);
+            setError(err.message);
+        } finally {
+            setLoading(false);
+        }
+    };
 
-    const term = searchTerm.toLowerCase();
-    return allSongs.filter(song => 
-      song.title.toLowerCase().includes(term) ||
-      (song.artist && song.artist.toLowerCase().includes(term))
-    );
-  }, [allSongs, searchTerm]);
+    // Extract key (tone) from ChordPro content
+    const extractKeyFromContent = (content) => {
+        // Look for {key: X} or {k: X} in ChordPro format
+        const keyMatch = content.match(/\{(?:key|k):\s*([A-G][#b]?m?)\}/i);
+        return keyMatch ? keyMatch[1] : null;
+    };
 
-  // Músicas selecionadas com conteúdo e transposição
-  const selectedSongs = useMemo(() => {
-    return selectedSongIds
-      .map(id => {
-        const song = allSongs.find(s => s.id === id);
-        if (!song) return null;
+    // Load content of a specific song
+    const loadSongContent = useCallback(async (songId) => {
+        // If already loaded, don't load again
+        if (songsContent[songId]) {
+            return songsContent[songId];
+        }
 
-        return {
-          id: song.id,
-          title: song.title,
-          artist: song.artist,
-          key: song.key || '', // Tom original
-          content: songsContent[id] || '', // Conteúdo pode estar sendo carregado
-          transposition: semitoneShift[id] || 0
-        };
-      })
-      .filter(song => song !== null);
-  }, [selectedSongIds, allSongs, songsContent, semitoneShift]);
+        const song = allSongs.find(s => s.id === songId);
+        if (!song) {
+            console.error(`Song ${songId} not found`);
+            return null;
+        }
 
-  return {
-    // Dados
-    allSongs,
-    selectedSongs,
-    semitoneShift,
-    
-    // Estado de busca
-    searchTerm,
-    setSearchTerm,
-    
-    // Músicas filtradas
-    filteredSongs,
-    
-    // Ações
-    toggleSongSelection,
-    handleShiftChange,
-    
-    // Estado de carregamento
-    loading,
-    error,
-    
-    // Para recarregar se necessário
-    reloadSongs: loadSongsMetadata
-  };
+        try {
+            const songPath = `${import.meta.env.BASE_URL}charts/${song.filename}`;
+            console.log(`Loading content of ${song.title}:`, songPath);
+
+            const response = await fetch(songPath);
+
+            if (!response.ok) {
+                throw new Error(`Error loading ${song.filename}`);
+            }
+
+            const content = await response.text();
+
+            // Extract key from content
+            const key = extractKeyFromContent(content);
+
+            // Update allSongs with extracted key
+            setAllSongs(prev => prev.map(s =>
+                s.id === songId ? { ...s, key } : s
+            ));
+
+            setSongsContent(prev => ({
+                ...prev,
+                [songId]: content
+            }));
+
+            console.log(`Song ${song.title} loaded. Original key: ${key || 'not found'}`);
+
+            return content;
+
+        } catch (err) {
+            console.error(`Error loading song ${songId}:`, err);
+            return null;
+        }
+    }, [allSongs, songsContent]);
+
+    // Toggle song selection
+    const toggleSongSelection = useCallback(async (songId) => {
+        setSelectedSongIds(prev => {
+            const isSelected = prev.includes(songId);
+
+            if (isSelected) {
+                // Deselect
+                return prev.filter(id => id !== songId);
+            } else {
+                // Select and load content
+                loadSongContent(songId);
+                return [...prev, songId];
+            }
+        });
+
+        // Initialize transposition at 0
+        if (!semitoneShift[songId]) {
+            setSemitoneShift(prev => ({
+                ...prev,
+                [songId]: 0
+            }));
+        }
+    }, [semitoneShift, loadSongContent]);
+
+    // Update transposition of a song
+    const handleShiftChange = useCallback((songId, newShift) => {
+        setSemitoneShift(prev => ({
+            ...prev,
+            [songId]: newShift
+        }));
+    }, []);
+
+    // Reset transposition of a song to 0
+    const resetTransposition = useCallback((songId) => {
+        setSemitoneShift(prev => ({
+            ...prev,
+            [songId]: 0
+        }));
+    }, []);
+
+    // Increment transposition
+    const incrementTransposition = useCallback((songId) => {
+        setSemitoneShift(prev => ({
+            ...prev,
+            [songId]: (prev[songId] || 0) + 1
+        }));
+    }, []);
+
+    // Decrement transposition
+    const decrementTransposition = useCallback((songId) => {
+        setSemitoneShift(prev => ({
+            ...prev,
+            [songId]: (prev[songId] || 0) - 1
+        }));
+    }, []);
+
+    // Songs filtered by search
+    const filteredSongs = useMemo(() => {
+        if (!searchTerm.trim()) {
+            return allSongs;
+        }
+
+        const term = searchTerm.toLowerCase();
+        return allSongs.filter(song =>
+            song.title.toLowerCase().includes(term) ||
+            (song.artist && song.artist.toLowerCase().includes(term))
+        );
+    }, [allSongs, searchTerm]);
+
+    // Selected songs with content and transposition
+    const selectedSongs = useMemo(() => {
+        return selectedSongIds
+            .map(id => {
+                const song = allSongs.find(s => s.id === id);
+                if (!song) return null;
+
+                return {
+                    id: song.id,
+                    title: song.title,
+                    artist: song.artist,
+                    key: song.key || '', // Original key
+                    content: songsContent[id] || '', // Content may be loading
+                    transposition: semitoneShift[id] || 0
+                };
+            })
+            .filter(song => song !== null);
+    }, [selectedSongIds, allSongs, songsContent, semitoneShift]);
+
+    return {
+        // Data
+        allSongs,
+        selectedSongs,
+        semitoneShift,
+
+        // Search state
+        searchTerm,
+        setSearchTerm,
+
+        // Filtered songs
+        filteredSongs,
+
+        // Actions
+        toggleSongSelection,
+        handleShiftChange,
+        resetTransposition,
+        incrementTransposition,
+        decrementTransposition,
+
+        // Loading state
+        loading,
+        error,
+
+        // Reload if necessary
+        reloadSongs: loadSongsMetadata
+    };
 }
