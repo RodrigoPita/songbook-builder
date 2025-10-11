@@ -75,7 +75,7 @@ const Sidebar = ({
                                     <div>
                                         <p className="font-bold text-gray-800 leading-snug">{song.title}</p>
                                         <p className="text-sm text-gray-500">
-                                            {song.artist} ({song.key})
+                                            {song.artist}
                                         </p>
                                     </div>
                                     {selectedSongIds.includes(song.id) ? (
