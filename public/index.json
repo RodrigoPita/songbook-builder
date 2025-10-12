@@ -18,6 +18,30 @@
         "filename": "abraca_me.cho"
     },
     {
+        "id": "aleluia_minhalma",
+        "title": "Aleluia, Minh’alma Abrirei",
+        "artist": "",
+        "filename": "aleluia_minhalma.cho"
+    },
+    {
+        "id": "ao_eterno_amor",
+        "title": "Ao Eterno Amor",
+        "artist": "Vida Reluz",
+        "filename": "ao_eterno_amor.cho"
+    },
+    {
+        "id": "aparecida",
+        "title": "Aparecida",
+        "artist": "Colo De Deus",
+        "filename": "aparecida.cho"
+    },
+    {
+        "id": "atos_2",
+        "title": "Atos 2",
+        "artist": "Gabriela Rocha",
+        "filename": "atos_2.cho"
+    },
+    {
         "id": "colo_de_mae",
         "title": "Colo De Mãe",
         "artist": "Tony Allyson",
