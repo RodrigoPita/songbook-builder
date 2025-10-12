@@ -16,9 +16,9 @@ const ChordProLine = ({ chordLine, lyricLine, inChorus }) => {
     return (
         // Container for a single line of lyrics and chords.
         <div className={`whitespace-pre-wrap font-mono leading-relaxed print:text-sm print:leading-normal ${inChorus ? 'print:font-bold' : ''}`}>
-            {/* Linha de acordes: sempre negrito, talvez maior */}
+            {/* Chord line: monospace and bold */}
             <pre className={chordClass} style={{ height: '1.4rem', lineHeight: '1', fontFamily: 'monospace' }}>{chordLine}</pre>
-            {/* Linha de letras: negrito apenas se for refrão */}
+            {/* Lyric line: normal text and bold if in chorus */}
             <pre className={lyricClass} style={{ marginTop: '-0.3rem', lineHeight: '1.5' }}>{lyricLine}</pre>
         </div>
     );

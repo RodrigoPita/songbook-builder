@@ -26,10 +26,10 @@ export const processChordProSimple = (content, originalKey, semitoneShift) => {
                 processedElements.push(
                     <p key={`key-${lineIndex}`} className="text-xs text-gray-400 mt-2 mb-1 print:hidden"></p>
                 );
-            } else if (directive === 'start_of_chorus' || directive === 'soc') { // 'soc' é um alias comum
+            } else if (directive === 'start_of_chorus' || directive === 'soc') {
                 inChorus = true;
                 processedElements.push(<div key={`soc-${lineIndex}`} className="h-4"></div>);
-            } else if (directive === 'end_of_chorus' || directive === 'eoc') { // 'eoc' é um alias comum
+            } else if (directive === 'end_of_chorus' || directive === 'eoc') {
                 inChorus = false;
                 processedElements.push(<div key={`eoc-${lineIndex}`} className="h-4"></div>);
             }
@@ -52,19 +52,41 @@ export const processChordProSimple = (content, originalKey, semitoneShift) => {
                 chordLine += ' '.repeat(initialText.length);
             }
 
-            matches.forEach(match => {
+            matches.forEach((match, matchIndex) => {
                 const fullMatch = match[0];
-                const chordContent = match[1].replace(/\[|\]/g, '');
+                let chordContent = match[1].replace(/\[|\]/g, '');
                 const lyrics = match[2];
 
-                // Transpose chord
+                // Handle parentheses: extract them and remove from chord for transposition
+                let prefix = '';
+                let suffix = '';
+
+                // Check for opening parenthesis
+                if (chordContent.startsWith('(')) {
+                    prefix = '(';
+                    chordContent = chordContent.substring(1);
+                }
+
+                // Check for closing parenthesis
+                if (chordContent.endsWith(')')) {
+                    suffix = ')';
+                    chordContent = chordContent.substring(0, chordContent.length - 1);
+                }
+
+                // Transpose chord (without parentheses)
                 const transposedChord = transposeChord(chordContent.trim(), originalKey, semitoneShift);
 
-                // Chord line uses lyric spacing for alignment
-                const paddingLength = lyrics.length > 0 ? lyrics.length : transposedChord.length;
-                chordLine += transposedChord.padEnd(paddingLength, ' ');
+                // Rebuild with parentheses
+                const finalChord = prefix + transposedChord + suffix;
 
-                lyricLine += lyrics;
+                // Calculate padding needed to ensure chords don't collide:
+                // Use the longer of: (transposed chord + 2 spaces) OR (original lyrics length)
+                const minSpacing = finalChord.length + 2; // Minimum: chord + 2 spaces
+                const paddingLength = Math.max(minSpacing, lyrics.length);
+
+                chordLine += finalChord.padEnd(paddingLength, ' ');
+                lyricLine += lyrics.padEnd(paddingLength, ' ');
+
                 lastIndex = match.index + fullMatch.length;
             });
 
