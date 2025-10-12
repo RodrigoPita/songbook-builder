@@ -54,20 +54,39 @@ export const processChordProSimple = (content, originalKey, semitoneShift) => {
 
             matches.forEach((match, matchIndex) => {
                 const fullMatch = match[0];
-                const chordContent = match[1].replace(/\[|\]/g, '');
+                let chordContent = match[1].replace(/\[|\]/g, '');
                 const lyrics = match[2];
 
-                // Transpose chord
+                // Handle parentheses: extract them and remove from chord for transposition
+                let prefix = '';
+                let suffix = '';
+
+                // Check for opening parenthesis
+                if (chordContent.startsWith('(')) {
+                    prefix = '(';
+                    chordContent = chordContent.substring(1);
+                }
+
+                // Check for closing parenthesis
+                if (chordContent.endsWith(')')) {
+                    suffix = ')';
+                    chordContent = chordContent.substring(0, chordContent.length - 1);
+                }
+
+                // Transpose chord (without parentheses)
                 const transposedChord = transposeChord(chordContent.trim(), originalKey, semitoneShift);
+
+                // Rebuild with parentheses
+                const finalChord = prefix + transposedChord + suffix;
 
                 // Calculate padding needed to ensure chords don't collide:
                 // Use the longer of: (transposed chord + 2 spaces) OR (original lyrics length)
-                const minSpacing = transposedChord.length + 2; // Minimum: chord + 2 spaces
+                const minSpacing = finalChord.length + 2; // Minimum: chord + 2 spaces
                 const paddingLength = Math.max(minSpacing, lyrics.length);
 
-                chordLine += transposedChord.padEnd(paddingLength, ' ');
+                chordLine += finalChord.padEnd(paddingLength, ' ');
                 lyricLine += lyrics.padEnd(paddingLength, ' ');
-                
+
                 lastIndex = match.index + fullMatch.length;
             });
 
