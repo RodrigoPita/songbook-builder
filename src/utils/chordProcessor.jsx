@@ -26,10 +26,10 @@ export const processChordProSimple = (content, originalKey, semitoneShift) => {
                 processedElements.push(
                     <p key={`key-${lineIndex}`} className="text-xs text-gray-400 mt-2 mb-1 print:hidden"></p>
                 );
-            } else if (directive === 'start_of_chorus' || directive === 'soc') { // 'soc' é um alias comum
+            } else if (directive === 'start_of_chorus' || directive === 'soc') {
                 inChorus = true;
                 processedElements.push(<div key={`soc-${lineIndex}`} className="h-4"></div>);
-            } else if (directive === 'end_of_chorus' || directive === 'eoc') { // 'eoc' é um alias comum
+            } else if (directive === 'end_of_chorus' || directive === 'eoc') {
                 inChorus = false;
                 processedElements.push(<div key={`eoc-${lineIndex}`} className="h-4"></div>);
             }
@@ -52,7 +52,7 @@ export const processChordProSimple = (content, originalKey, semitoneShift) => {
                 chordLine += ' '.repeat(initialText.length);
             }
 
-            matches.forEach(match => {
+            matches.forEach((match, matchIndex) => {
                 const fullMatch = match[0];
                 const chordContent = match[1].replace(/\[|\]/g, '');
                 const lyrics = match[2];
@@ -60,11 +60,14 @@ export const processChordProSimple = (content, originalKey, semitoneShift) => {
                 // Transpose chord
                 const transposedChord = transposeChord(chordContent.trim(), originalKey, semitoneShift);
 
-                // Chord line uses lyric spacing for alignment
-                const paddingLength = lyrics.length > 0 ? lyrics.length : transposedChord.length;
-                chordLine += transposedChord.padEnd(paddingLength, ' ');
+                // Calculate padding needed to ensure chords don't collide:
+                // Use the longer of: (transposed chord + 2 spaces) OR (original lyrics length)
+                const minSpacing = transposedChord.length + 2; // Minimum: chord + 2 spaces
+                const paddingLength = Math.max(minSpacing, lyrics.length);
 
-                lyricLine += lyrics;
+                chordLine += transposedChord.padEnd(paddingLength, ' ');
+                lyricLine += lyrics.padEnd(paddingLength, ' ');
+                
                 lastIndex = match.index + fullMatch.length;
             });
 
