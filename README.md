@@ -8,8 +8,6 @@
 ![Vite](https://img.shields.io/badge/vite-%23646CFF.svg?style=for-the-badge&logo=vite&logoColor=white)
 ![React](https://img.shields.io/badge/react-%2320232a.svg?style=for-the-badge&logo=react&logoColor=%2361DAFB)
 
-**[🎹 Live Demo](https://rodrigopita.github.io/songbook-builder/)** | **[📖 Documentation](#-how-to-use)** | **[🐛 Report Bug](https://github.com/RodrigoPita/songbook-builder/issues)**
-
 </div>
 
 A simple web app to create, transpose, and export multi-page PDF songbooks from ChordPro charts.
