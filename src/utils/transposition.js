@@ -129,10 +129,6 @@ export const transposeChord = (chord, originalKey, semitoneShift) => {
 
         newRoot = targetBaseInfo.root;
 
-        // Preserve or inherit quality
-        if (!chordInfo.quality && targetBaseInfo.quality === 'm') {
-            newQuality = 'm';
-        }
     } else {
         // Chromatic fallback for non-diatonic chords
         newRoot = applyChromaticShift(chordInfo.root, semitoneShift, targetKey);
