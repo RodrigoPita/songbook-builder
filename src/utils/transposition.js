@@ -7,29 +7,35 @@ import {
     MAJOR_KEYS_FOR_DEGREE
 } from '../constants/musicConstants';
 
-// 1. Extracts Root, Quality, Modifier, and Bass.
+// Parse chord into components (root, quality, modifier, bass)
 export function getBaseChordInfo(chord) {
     let processedChord = chord.trim();
+
+    // Remove optional parentheses
     const optionalParenMatch = processedChord.match(/^\((.*)\)$/);
     if (optionalParenMatch) {
         processedChord = optionalParenMatch[1];
     }
 
+    // Split main chord and bass note
     const parts = processedChord.split('/');
     const mainChord = parts[0];
     const bassNote = parts.length > 1 ? parts[1].trim() : null;
 
+    // Extract root, quality, and modifier
     const match = mainChord.match(/^([A-G][#b]?)(m|dim|maj)?/i);
-    if (!match) return { root: null, quality: '', modifier: '', bassNote, originalParen: optionalParenMatch !== null };
+    if (!match) {
+        return { root: null, quality: '', modifier: '', bassNote, originalParen: !!optionalParenMatch };
+    }
 
     const root = match[1];
-    let quality = match[2] || '';
+    const quality = (match[2] || '').toLowerCase();
     const modifier = mainChord.substring(match[0].length);
 
-    return { root, quality: quality.toLowerCase(), modifier, bassNote, originalParen: optionalParenMatch !== null };
+    return { root, quality, modifier, bassNote, originalParen: !!optionalParenMatch };
 }
 
-// 2. Determines the new key (for display and notation only)
+// Get target key after transposition
 export function getTargetKeyFromShift(originalKey, shift) {
     const originalIndex = SEMITONE_MAP[originalKey];
     if (originalIndex === undefined) return originalKey;
@@ -37,110 +43,105 @@ export function getTargetKeyFromShift(originalKey, shift) {
     const newChromaticIndex = (originalIndex + shift + 12) % 12;
     const targetKeySharp = NOTES_SHARP[newChromaticIndex];
 
+    // Prefer flats for flat keys
     if (!SHARP_KEYS.includes(targetKeySharp) && NOTES_FLAT[newChromaticIndex] !== targetKeySharp) {
         return NOTES_FLAT[newChromaticIndex];
     }
+
     return targetKeySharp;
 }
 
-// 3. Determines the diatonic degree (for diatonic transposition).
+// Get diatonic degree of chord in key (0-6 for I-VII, -1 if not diatonic)
 const getDiatonicDegree = (chord, originalKey) => {
-    // Try to use the original key if it's a major key (or a minor/modified key that is in the map)
     let effectiveKey = MAJOR_KEYS_FOR_DEGREE.includes(originalKey) ? originalKey : null;
 
+    // For minor keys, use parallel major
     if (!effectiveKey) {
-        // For minor keys (e.g., Am), use the parallel major (C) to calculate the diatonic degree.
         const originalIndex = SEMITONE_MAP[originalKey.replace('m', '')];
         if (originalIndex !== undefined) {
-             // C + 3 = Eb (Cm -> Eb)
-             const majorParallelIndex = (originalIndex + 3) % 12;
-             effectiveKey = NOTES_SHARP[majorParallelIndex];
-             // Try to correct for common flats (e.g., D# -> Eb)
-             if (majorParallelIndex === 3) effectiveKey = 'Eb'; // D# -> Eb
-             if (majorParallelIndex === 8) effectiveKey = 'Ab'; // G# -> Ab
-             if (majorParallelIndex === 10) effectiveKey = 'Bb'; // A# -> Bb
+            const majorParallelIndex = (originalIndex + 3) % 12;
+            effectiveKey = NOTES_SHARP[majorParallelIndex];
+
+            // Correct common flats
+            if (majorParallelIndex === 3) effectiveKey = 'Eb';
+            if (majorParallelIndex === 8) effectiveKey = 'Ab';
+            if (majorParallelIndex === 10) effectiveKey = 'Bb';
         }
     }
-    
+
     const keyChords = HARMONIC_FIELD[effectiveKey] || HARMONIC_FIELD[originalKey];
     if (!keyChords) return -1;
 
     const { root } = getBaseChordInfo(chord);
     if (!root) return -1;
 
+    // Find matching degree by semitone comparison
     for (let degree = 0; degree < keyChords.length; degree++) {
         const fieldChordInfo = getBaseChordInfo(keyChords[degree]);
-        // Compare the semitone of the chord root with the semitone of the harmonic field chord root
         if (SEMITONE_MAP[root] === SEMITONE_MAP[fieldChordInfo.root]) {
-            return degree; // Diatonic degree found (0=I, 1=ii, 2=iii, etc.)
+            return degree;
         }
     }
-    
-    return -1; 
+
+    return -1;
 };
-// 4. Direct chromatic transposition, used for non-diatonic chords and bass notes.
+
+// Apply chromatic transposition to a note
 const applyChromaticShift = (rootNote, shift, targetKey) => {
     if (!rootNote) return null;
-    
+
     const originalNoteIndex = SEMITONE_MAP[rootNote];
     if (originalNoteIndex === undefined) return rootNote;
 
     const newChromaticIndex = (originalNoteIndex + shift + 12) % 12;
-    
-    // If the target key is a "flat key" (not in SHARP_KEYS), prefer flats.
     const isTargetFlatKey = !SHARP_KEYS.includes(targetKey);
 
     let newNote = NOTES_SHARP[newChromaticIndex];
-    
-    if (isTargetFlatKey) {
-        // If the note at the chromatic index has a flat representation in the FLAT table, use that.
-        if (NOTES_FLAT[newChromaticIndex] !== NOTES_SHARP[newChromaticIndex]) {
-             newNote = NOTES_FLAT[newChromaticIndex];
-        }
+
+    // Prefer flats for flat keys
+    if (isTargetFlatKey && NOTES_FLAT[newChromaticIndex] !== NOTES_SHARP[newChromaticIndex]) {
+        newNote = NOTES_FLAT[newChromaticIndex];
     }
-    
+
     return newNote;
-}
-// 5. Transposes the chord (main hybrid logic)
+};
+
+// Transpose chord using hybrid diatonic/chromatic logic
 export const transposeChord = (chord, originalKey, semitoneShift) => {
-    if (!chord || semitoneShift === 0) return chord; 
-    
+    if (!chord || semitoneShift === 0) return chord;
+
     const targetKey = getTargetKeyFromShift(originalKey, semitoneShift);
     const chordInfo = getBaseChordInfo(chord);
-    
-    if (!chordInfo.root) return chord; // Not a standard chord (e.g., N.C.)
+
+    if (!chordInfo.root) return chord; // Not a standard chord
 
     let newRoot;
     let newQuality = chordInfo.quality;
 
-    // 1. Try Diatonic Transposition
+    // Try diatonic transposition first
     const targetField = HARMONIC_FIELD[targetKey];
     const originalDegree = getDiatonicDegree(chord, originalKey);
 
     if (originalDegree !== -1 && targetField) {
-        // DIATONIC: use the corresponding chord from the target key's harmonic field
+        // Diatonic: use corresponding chord from target key
         const targetDiatonicChord = targetField[originalDegree];
         const targetBaseInfo = getBaseChordInfo(targetDiatonicChord);
-        
+
         newRoot = targetBaseInfo.root;
-        
-        // Quality Adjustment: If the original chord had no quality (C) but the target does (Dm), apply the quality (m)
+
+        // Preserve or inherit quality
         if (!chordInfo.quality && targetBaseInfo.quality === 'm') {
             newQuality = 'm';
-        } else {
-             newQuality = chordInfo.quality;
         }
-
     } else {
-        // --- 2. Chromatic (Fallback) ---
-        // Non-diatonic/borrowed chord
+        // Chromatic fallback for non-diatonic chords
         newRoot = applyChromaticShift(chordInfo.root, semitoneShift, targetKey);
     }
-    
-    // 3. Build the Chord
+
+    // Build transposed chord
     let finalChord = `${newRoot}${newQuality}${chordInfo.modifier}`;
-    
-    // 4. Transpose the Bass (ALWAYS Chromatic)
+
+    // Transpose bass note (always chromatic)
     if (chordInfo.bassNote) {
         const newBassNote = applyChromaticShift(chordInfo.bassNote, semitoneShift, targetKey);
         if (newBassNote) {
@@ -148,7 +149,7 @@ export const transposeChord = (chord, originalKey, semitoneShift) => {
         }
     }
 
-    // Re-add parentheses if the original chord had them
+    // Restore parentheses if original had them
     if (chordInfo.originalParen) {
         finalChord = `(${finalChord})`;
     }
