@@ -94,6 +94,7 @@ Create a new `.cho` file in `public/charts/` with this format:
 {title: Song Title}
 {artist: Artist Name}
 {key: C}
+{tags: tag_1}
 
 [C]This is a [G]sample song
 With [Am]chords and [F]lyrics
