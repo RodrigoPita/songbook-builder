@@ -252,18 +252,6 @@ This app supports standard ChordPro format with the following directives:
 * `[Chord]` - Chord notation
 * `[Chord]lyrics` - Chord with lyrics
 
-**Example:**
-```chordpro
-{title: Amazing Grace}
-{artist: John Newton}
-{key: G}
-
-{start_of_chorus}
-A[G]mazing [C]grace, how [G]sweet the sound
-That [G]saved a [D]wretch like [G]me
-{end_of_chorus}
-```
-
 ---
 
 <div align="center">
