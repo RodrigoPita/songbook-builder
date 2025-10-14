@@ -98,7 +98,7 @@ Create a new `.cho` file in `public/charts/` with this format:
 With [Am]chords and [F]lyrics
 ```
 
-### 2. Update the Index
+### 2.1 Update the Index (Manually)
 
 Add your song to `public/charts/index.json`:
 
@@ -107,9 +107,66 @@ Add your song to `public/charts/index.json`:
   "id": "song_title",
   "title": "Song Title",
   "artist": "Artist Name",
-  "filename": "song_title.cho"
+  "filename": "song_title.cho",
+  "markers": [
+    "marker_1"
+  ]
 }
 ```
+
+---
+
+### 2.2 Update the Index with Index Builder (`build_index.sh`)
+
+You can easily create an `index.json` file that lists all songs and their metadata (title, artist, and filename) using the provided script.
+
+#### Usage
+
+1. Make the script executable:
+
+   ```bash
+   chmod +x build_index.sh
+   ```
+2. Run it in the project root:
+
+   ```bash
+   ./build_index.sh
+   ```
+3. The script will scan the `charts/` directory for `.cho` files and generate an `index.json` file like this:
+
+   ```json
+   [
+     {
+       "id": "converted_song_1",
+       "title": "Converted Song 1",
+       "artist": "Artist 1",
+       "filename": "converted_song_1.cho",
+       "markers": [
+        "marker_1",
+        "marker_2"
+       ]
+     },
+     {
+       "id": "converted_song_2",
+       "title": "Converted Song 2",
+       "artist": "Artist 2",
+       "filename": "converted_song_2.cho",
+       "markers": []
+     }
+   ]
+   ```
+
+#### Notes
+
+* The `id` is automatically derived from the filename (without the `.cho` extension).
+* The script extracts the `{title: ...}`, `{artist: ...}` and `{markers: ...}` metadata directly from the `.cho` files.
+* Markers should be defined in your ChordPro files as a comma-separated list, for example:
+  ```
+     {markers: marker_1, marker_2}
+  ```
+* The output file is written to `charts/index.json`.
+
+---
 
 ### 3. Reload the App
 
