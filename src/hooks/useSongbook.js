@@ -38,6 +38,9 @@ export function useSongbook() {
                 artist: song.artist || '',
                 key: song.key || '',
                 filename: song.filename,
+                markers: Array.isArray(song.markers) 
+                    ? song.markers.map(m => m.toLowerCase().trim())
+                    : (song.markers ? [song.markers.toLowerCase().trim()] : []),
                 content: null
             }));
 
@@ -119,7 +122,8 @@ export function useSongbook() {
         const term = searchTerm.toLowerCase();
         return allSongs.filter(song =>
             song.title.toLowerCase().includes(term) ||
-            (song.artist && song.artist.toLowerCase().includes(term))
+            (song.artist && song.artist.toLowerCase().includes(term)) ||
+            (song.markers && song.markers.some(marker => marker.includes(term)))
         );
     }, [allSongs, searchTerm]);
 
@@ -135,6 +139,7 @@ export function useSongbook() {
                     title: song.title,
                     artist: song.artist,
                     key: song.key || '',
+                    markers: song.markers || [],
                     content: songsContent[id] || '',
                     transposition: semitoneShift[id] || 0
                 };
