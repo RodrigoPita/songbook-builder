@@ -109,8 +109,8 @@ Add your song to `public/charts/index.json`:
   "title": "Song Title",
   "artist": "Artist Name",
   "filename": "song_title.cho",
-  "markers": [
-    "marker_1"
+  "tags": [
+    "tag_1"
   ]
 }
 ```
@@ -142,9 +142,9 @@ You can easily create an `index.json` file that lists all songs and their metada
        "title": "Converted Song 1",
        "artist": "Artist 1",
        "filename": "converted_song_1.cho",
-       "markers": [
-        "marker_1",
-        "marker_2"
+       "tags": [
+        "tag_1",
+        "tag_2"
        ]
      },
      {
@@ -152,7 +152,7 @@ You can easily create an `index.json` file that lists all songs and their metada
        "title": "Converted Song 2",
        "artist": "Artist 2",
        "filename": "converted_song_2.cho",
-       "markers": []
+       "tags": []
      }
    ]
    ```
@@ -160,10 +160,10 @@ You can easily create an `index.json` file that lists all songs and their metada
 #### Notes
 
 * The `id` is automatically derived from the filename (without the `.cho` extension).
-* The script extracts the `{title: ...}`, `{artist: ...}` and `{markers: ...}` metadata directly from the `.cho` files.
-* Markers should be defined in your ChordPro files as a comma-separated list, for example:
+* The script extracts the `{title: ...}`, `{artist: ...}` and `{tags: ...}` metadata directly from the `.cho` files.
+* tags should be defined in your ChordPro files as a comma-separated list, for example:
   ```
-     {markers: marker_1, marker_2}
+     {tags: tag_1, tag_2}
   ```
 * The output file is written to `charts/index.json`.
 

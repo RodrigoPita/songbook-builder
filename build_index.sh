@@ -21,9 +21,9 @@ for file in "$CHARTS_DIR"/*.cho; do
 	title=$(awk -F'[{}:]' '/\{title:/ {gsub(/^[ \t]+|[ \t]+$/, "", $3); print $3; exit}' "$file")
 	artist=$(awk -F'[{}:]' '/\{artist:/ {gsub(/^[ \t]+|[ \t]+$/, "", $3); print $3; exit}' "$file")
 
-	# Extract markers (comma-separated list)
-	markers=$(awk -F'[{}:]' '
-		/\{markers:/ {
+	# Extract tags (comma-separated list)
+	tags=$(awk -F'[{}:]' '
+		/\{tags:/ {
 			split($3, arr, ",");
 			for (i = 1; i <= length(arr); i++) {
 				gsub(/^[ \t]+|[ \t]+$/, "", arr[i]);
@@ -50,12 +50,12 @@ for file in "$CHARTS_DIR"/*.cho; do
 		echo "    \"title\": \"$title\","
 		echo "    \"artist\": \"$artist\","
 		echo "    \"filename\": \"$filename\","
-		if [ -n "$markers" ]; then
-			echo "    \"markers\": ["
-			echo "$markers"
+		if [ -n "$tags" ]; then
+			echo "    \"tags\": ["
+			echo "$tags"
 			echo "    ]"
 		else
-			echo "    \"markers\": []"
+			echo "    \"tags\": []"
 		fi
 		echo -n "  }"
 	} >>"$OUTPUT_FILE"
