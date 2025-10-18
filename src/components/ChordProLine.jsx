@@ -7,19 +7,41 @@
  * @param {boolean} props.inChorus - Indicates if the current line is part of a chorus section.
  */
 const ChordProLine = ({ chordLine, lyricLine, inChorus }) => {
-    // If the line is completely empty, render a spacer div to maintain vertical rhythm.
     if (!chordLine && !lyricLine) return <div className="h-4"></div>;
 
-    const chordClass = `chord-line text-base sm:text-lg text-emerald-600 font-extrabold m-0 p-0 overflow-visible print:text-base`;
+    const chordClass = `chord-line text-emerald-600 font-extrabold m-0 p-0 print:text-base`;
     const lyricClass = `text-gray-800 ${inChorus ? 'font-bold' : ''}`;
 
     return (
-        // Container for a single line of lyrics and chords.
         <div className={`whitespace-pre-wrap font-mono leading-relaxed print:text-sm print:leading-normal ${inChorus ? 'print:font-bold' : ''}`}>
-            {/* Chord line: monospace and bold */}
-            <pre className={chordClass} style={{ height: '1.4rem', lineHeight: '1', fontFamily: 'monospace' }}>{chordLine}</pre>
-            {/* Lyric line: normal text and bold if in chorus */}
-            <pre className={lyricClass} style={{ marginTop: '-0.3rem', lineHeight: '1.5' }}>{lyricLine}</pre>
+            {/* Chord line: monospace and bold with responsive font */}
+            <pre 
+                className={chordClass} 
+                style={{ 
+                    fontSize: 'clamp(7px, 2.2vw, 20px)',
+                    height: 'auto', 
+                    minHeight: '1rem',
+                    lineHeight: '1.2', 
+                    fontFamily: 'monospace',
+                    whiteSpace: 'pre-wrap',
+                    wordBreak: 'break-word'
+                }}
+            >
+                {chordLine}
+            </pre>
+            {/* Lyric line: scales with chords */}
+            <pre 
+                className={lyricClass} 
+                style={{ 
+                    fontSize: 'clamp(7px, 2.2vw, 20px)',
+                    marginTop: '-0.2rem', 
+                    lineHeight: '1.4',
+                    whiteSpace: 'pre-wrap',
+                    wordBreak: 'break-word'
+                }}
+            >
+                {lyricLine}
+            </pre>
         </div>
     );
 };
