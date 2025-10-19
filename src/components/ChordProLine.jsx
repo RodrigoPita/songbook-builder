@@ -18,7 +18,7 @@ const ChordProLine = ({ chordLine, lyricLine, inChorus }) => {
             <pre 
                 className={chordClass} 
                 style={{ 
-                    fontSize: 'clamp(7px, 2.2vw, 20px)',
+                    fontSize: 'clamp(7px, 2.2vw, 18px)',
                     height: 'auto', 
                     minHeight: '1rem',
                     lineHeight: '1.2', 
@@ -33,7 +33,7 @@ const ChordProLine = ({ chordLine, lyricLine, inChorus }) => {
             <pre 
                 className={lyricClass} 
                 style={{ 
-                    fontSize: 'clamp(7px, 2.2vw, 20px)',
+                    fontSize: 'clamp(7px, 2.2vw, 18px)',
                     marginTop: '-0.2rem', 
                     lineHeight: '1.4',
                     whiteSpace: 'pre-wrap',
