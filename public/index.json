@@ -7,6 +7,15 @@
     "tags": []
   },
   {
+    "id": "a_casa_e_sua",
+    "title": "A Casa É Sua",
+    "artist": "Casa Worship",
+    "filename": "a_casa_e_sua.cho",
+    "tags": [
+      "adoração"
+    ]
+  },
+  {
     "id": "a_ti_meu_deus",
     "title": "A Ti Meu Deus",
     "artist": "",
@@ -67,7 +76,7 @@
     "artist": "",
     "filename": "aleluia_minhalma.cho",
     "tags": [
-      "aleluia"
+      "aclamação"
     ]
   },
   {
@@ -76,7 +85,7 @@
     "artist": "",
     "filename": "aleluia_quando_estamos_unidos.cho",
     "tags": [
-      "aleluia"
+      "aclamação"
     ]
   },
   {
@@ -143,6 +152,75 @@
     ]
   },
   {
+    "id": "bonequinha_de_pano",
+    "title": "Bonequinha De Pano",
+    "artist": "Pedro Valença",
+    "filename": "bonequinha_de_pano.cho",
+    "tags": [
+      "intercessão",
+      "cura"
+    ]
+  },
+  {
+    "id": "caminhada",
+    "title": "Caminhada",
+    "artist": "Pe. Jonas Abib",
+    "filename": "caminhada.cho",
+    "tags": [
+      "fé",
+      "perseverança"
+    ]
+  },
+  {
+    "id": "cancao_de_pedro",
+    "title": "Canção De Pedro",
+    "artist": "Bruno Camurati",
+    "filename": "cancao_de_pedro.cho",
+    "tags": [
+      "ação de graças",
+      "missão"
+    ]
+  },
+  {
+    "id": "caneta_e_papel",
+    "title": "Caneta E Papel",
+    "artist": "Os Arrais",
+    "filename": "caneta_e_papel.cho",
+    "tags": [
+      "intercessão",
+      "missão"
+    ]
+  },
+  {
+    "id": "cartas_ao_remetente",
+    "title": "Cartas Ao Remetente",
+    "artist": "Rosa De Saron",
+    "filename": "cartas_ao_remetente.cho",
+    "tags": [
+      "intercessão"
+    ]
+  },
+  {
+    "id": "cheia_de_graca",
+    "title": "Cheia De Graça",
+    "artist": "Entrenós",
+    "filename": "cheia_de_graca.cho",
+    "tags": [
+      "terço",
+      "maria"
+    ]
+  },
+  {
+    "id": "cheiro_de_rosas",
+    "title": "Cheiro De Rosas",
+    "artist": "Colo De Deus",
+    "filename": "cheiro_de_rosas.cho",
+    "tags": [
+      "terço",
+      "maria"
+    ]
+  },
+  {
     "id": "colo_de_mae",
     "title": "Colo De Mãe",
     "artist": "Tony Allyson",
@@ -150,6 +228,43 @@
     "tags": [
       "terço",
       "maria"
+    ]
+  },
+  {
+    "id": "como_es_lindo",
+    "title": "Como És Lindo",
+    "artist": "Vida Reluz",
+    "filename": "como_es_lindo.cho",
+    "tags": [
+      "comunhão"
+    ]
+  },
+  {
+    "id": "como_nao_me_apaixonar",
+    "title": "Como Não Me Apaixonar",
+    "artist": "Colo De Deus",
+    "filename": "como_nao_me_apaixonar.cho",
+    "tags": [
+      "adoração"
+    ]
+  },
+  {
+    "id": "como_sao_belos",
+    "title": "Como São Belos",
+    "artist": "Pe. Jonas Abib",
+    "filename": "como_sao_belos.cho",
+    "tags": [
+      "aclamação"
+    ]
+  },
+  {
+    "id": "conheco_um_coracao",
+    "title": "Conheço Um Coração",
+    "artist": "Pe. Zezinho",
+    "filename": "conheco_um_coracao.cho",
+    "tags": [
+      "adoração",
+      "ação de graças"
     ]
   },
   {
@@ -163,12 +278,96 @@
     ]
   },
   {
+    "id": "cordeiro_de_deus",
+    "title": "Cordeiro De Deus",
+    "artist": "",
+    "filename": "cordeiro_de_deus.cho",
+    "tags": [
+      "cordeiro"
+    ]
+  },
+  {
+    "id": "cordeiro_de_deus_shalom",
+    "title": "Cordeiro De Deus",
+    "artist": "Shalom",
+    "filename": "cordeiro_de_deus_shalom.cho",
+    "tags": [
+      "cordeiro"
+    ]
+  },
+  {
+    "id": "crucifixo",
+    "title": "Crucifixo",
+    "artist": "Chão E Paz",
+    "filename": "crucifixo.cho",
+    "tags": [
+      "adoração"
+    ]
+  },
+  {
+    "id": "danca_da_amizade",
+    "title": "Dança Da Amizade",
+    "artist": "",
+    "filename": "danca_da_amizade.cho",
+    "tags": [
+      "animação"
+    ]
+  },
+  {
+    "id": "de_deus",
+    "title": "De Deus",
+    "artist": "Daniela Araújo",
+    "filename": "de_deus.cho",
+    "tags": [
+      "adoração"
+    ]
+  },
+  {
+    "id": "declaracao_de_amor",
+    "title": "Declaração De Amor",
+    "artist": "André Bolela",
+    "filename": "declaracao_de_amor.cho",
+    "tags": [
+      "intercessão",
+      "filho",
+      "adoração"
+    ]
+  },
+  {
+    "id": "deixa_a_luz_do_ceu_entrar",
+    "title": "Deixa A Luz Do Céu Entrar",
+    "artist": "",
+    "filename": "deixa_a_luz_do_ceu_entrar.cho",
+    "tags": [
+      "entrada"
+    ]
+  },
+  {
+    "id": "derrama_o_teu_amor_aqui",
+    "title": "Derrama O Teu Amor Aqui",
+    "artist": "Celina Borges",
+    "filename": "derrama_o_teu_amor_aqui.cho",
+    "tags": [
+      "asperção"
+    ]
+  },
+  {
     "id": "desperta",
     "title": "Desperta",
     "artist": "Colo De Deus",
     "filename": "desperta.cho",
     "tags": [
       "adoração"
+    ]
+  },
+  {
+    "id": "o_ceu_se_abre",
+    "title": "O Céu Se Abre",
+    "artist": "Ministério Adoração E Vida",
+    "filename": "o_ceu_se_abre.cho",
+    "tags": [
+      "adoração",
+      "espírito santo"
     ]
   },
   {
