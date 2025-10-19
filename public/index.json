@@ -1,5 +1,19 @@
 [
   {
+    "id": "a_barca",
+    "title": "A Barca",
+    "artist": "",
+    "filename": "a_barca.cho",
+    "tags": []
+  },
+  {
+    "id": "a_ti_meu_deus",
+    "title": "A Ti Meu Deus",
+    "artist": "",
+    "filename": "a_ti_meu_deus.cho",
+    "tags": []
+  },
+  {
     "id": "abba",
     "title": "Abba",
     "artist": "Laura Souguellis",
@@ -37,6 +51,13 @@
     ]
   },
   {
+    "id": "agnus_dei",
+    "title": "Agnus Dei",
+    "artist": "",
+    "filename": "agnus_dei.cho",
+    "tags": []
+  },
+  {
     "id": "aleluia_minhalma",
     "title": "Aleluia, Minh’alma Abrirei",
     "artist": "",
@@ -46,6 +67,20 @@
     ]
   },
   {
+    "id": "aleluia_quando_estamos_unidos",
+    "title": "Aleluia, Quando Estamos Unidos",
+    "artist": "",
+    "filename": "aleluia_quando_estamos_unidos.cho",
+    "tags": []
+  },
+  {
+    "id": "amem_pregao",
+    "title": "Amém",
+    "artist": "Pregão",
+    "filename": "amem_pregao.cho",
+    "tags": []
+  },
+  {
     "id": "ao_eterno_amor",
     "title": "Ao Eterno Amor",
     "artist": "Vida Reluz",
@@ -53,6 +88,13 @@
     "tags": [
       "adoração"
     ]
+  },
+  {
+    "id": "ao_ouvir_tua_voz",
+    "title": "Ao Ouvir Tua Voz",
+    "artist": "Shalom",
+    "filename": "ao_ouvir_tua_voz.cho",
+    "tags": []
   },
   {
     "id": "aparecida",
@@ -73,6 +115,20 @@
       "adoração",
       "espírito santo"
     ]
+  },
+  {
+    "id": "basta_querer",
+    "title": "Basta Querer",
+    "artist": "Pe. Marcelo Rossi",
+    "filename": "basta_querer.cho",
+    "tags": []
+  },
+  {
+    "id": "basta_uma_palavra",
+    "title": "Basta Uma Palavra",
+    "artist": "Banda Bom Pastor",
+    "filename": "basta_uma_palavra.cho",
+    "tags": []
   },
   {
     "id": "colo_de_mae",
