@@ -14,6 +14,13 @@ export default defineConfig({
   },
   server: {
     // Para desenvolvimento local
-    port: 5173
+    port: 5173,
+    proxy: {
+      '/storage': {
+        target: 'https://storage.googleapis.com',
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/storage/, '')
+      }
+    }
   }
 })
