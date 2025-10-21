@@ -33,20 +33,32 @@ initializeApp({
 const db = getFirestore();
 const bucket = getStorage().bucket();
 
-// Extract metadata from ChordPro file
+// Extract metadata from ChordPro file (matching bash script behavior)
 function extractMetadata(content, filename) {
+  const lines = content.split('\n');
+  
+  // Extract title
   const titleMatch = content.match(/\{title:\s*([^}]+)\}/i);
+  const title = titleMatch ? titleMatch[1].trim() : '';
+  
+  // Extract artist
   const artistMatch = content.match(/\{artist:\s*([^}]+)\}/i);
-  const keyMatch = content.match(/\{(?:key|k):\s*([A-G][#b]?m?)\}/i);
-
-  const title = titleMatch ? titleMatch[1].trim() : filename.replace('.cho', '');
   const artist = artistMatch ? artistMatch[1].trim() : '';
-  const key = keyMatch ? keyMatch[1].trim() : '';
-
+  
+  // Extract tags (comma-separated list)
+  const tagsMatch = content.match(/\{tags:\s*([^}]+)\}/i);
+  let tags = [];
+  if (tagsMatch) {
+    tags = tagsMatch[1]
+      .split(',')
+      .map(tag => tag.trim())
+      .filter(tag => tag.length > 0);
+  }
+  
   // Generate ID from filename
-  const id = filename.replace('.cho', '').toLowerCase().replace(/\s+/g, '_');
-
-  return { id, title, artist, key, filename };
+  const id = filename.replace('.cho', '');
+  
+  return { id, title, artist, filename, tags };
 }
 
 async function syncSongs() {
@@ -72,14 +84,15 @@ async function syncSongs() {
         const content = fs.readFileSync(filePath, 'utf8');
         const metadata = extractMetadata(content, filename);
 
-        console.log(`Processing: ${metadata.title}...`);
+        console.log(`Processing: ${metadata.title || filename}...`);
 
         // Upload to Storage
         const destination = `charts/${filename}`;
         await bucket.upload(filePath, {
           destination,
           metadata: {
-            contentType: 'text/plain',
+            contentType: 'text/plain; charset=utf-8',
+            cacheControl: 'public, max-age=3600',
             metadata: {
               songId: metadata.id,
               title: metadata.title
@@ -95,22 +108,22 @@ async function syncSongs() {
         await db.collection('songs').doc(metadata.id).set({
           title: metadata.title,
           artist: metadata.artist,
-          key: metadata.key,
+          tags: metadata.tags,
           filename: metadata.filename,
           fileUrl: publicUrl,
           updatedAt: new Date()
         }, { merge: true });
 
-        // Add to index.json
+        // Add to index.json (matching bash script format exactly)
         indexData.push({
           id: metadata.id,
           title: metadata.title,
           artist: metadata.artist,
-          key: metadata.key,
-          filename: metadata.filename
+          filename: metadata.filename,
+          tags: metadata.tags
         });
 
-        console.log(`✅ ${metadata.title} synced`);
+        console.log(`✅ ${metadata.title || filename} synced`);
         syncedCount++;
 
       } catch (err) {
@@ -118,7 +131,7 @@ async function syncSongs() {
       }
     }
 
-    // Write index.json
+    // Write index.json (matching bash script format)
     fs.writeFileSync(indexPath, JSON.stringify(indexData, null, 2), 'utf8');
     console.log(`\n📝 index.json updated with ${indexData.length} songs`);
 
