@@ -15,17 +15,12 @@ export function useSongbook() {
     const [semitoneShift, setSemitoneShift] = useState({});
     const [searchTerm, setSearchTerm] = useState('');
 
-    // Load metadata from Firestore on mount
-    useEffect(() => {
-        loadSongsMetadata();
-    }, []);
-
-    const loadSongsMetadata = async () => {
+    // Load metadata from Firestore
+    const loadSongsMetadata = useCallback(async () => {
         try {
             setLoading(true);
             setError(null);
 
-            // Query Firestore for all songs, ordered by title
             const songsQuery = query(
                 collection(db, 'songs'),
                 orderBy('title', 'asc')
@@ -33,19 +28,19 @@ export function useSongbook() {
             
             const querySnapshot = await getDocs(songsQuery);
             
-            // Transform Firestore documents to app format
-            const songs = querySnapshot.docs.map(doc => ({
-                id: doc.id,
-                title: doc.data().title,
-                artist: doc.data().artist || '',
-                key: doc.data().key || '',
-                filename: doc.data().filename,
-                fileUrl: doc.data().fileUrl, // URL do Storage
-                tags: Array.isArray(doc.data().tags) 
-                    ? doc.data().tags.map(m => m.toLowerCase().trim())
-                    : (doc.data().tags ? [doc.data().tags.toLowerCase().trim()] : []),
-                content: null
-            }));
+            const songs = querySnapshot.docs.map(doc => {
+                const data = doc.data();
+                return {
+                    id: doc.id,
+                    title: data.title || '',
+                    artist: data.artist || '',
+                    key: data.key || '',
+                    tags: data.tags || [],
+                    filename: data.filename || '',
+                    fileUrl: data.fileUrl || '',
+                    content: null
+                };
+            });
 
             console.log('Songs loaded from Firebase:', songs.length);
             setAllSongs(songs);
@@ -56,7 +51,22 @@ export function useSongbook() {
         } finally {
             setLoading(false);
         }
-    };
+    }, []);
+
+    // Load on mount
+    useEffect(() => {
+        let isMounted = true;
+
+        loadSongsMetadata().catch(err => {
+            if (isMounted) {
+                console.error('Failed to load songs:', err);
+            }
+        });
+
+        return () => {
+            isMounted = false;
+        };
+    }, [loadSongsMetadata]);
 
     // Extract key from ChordPro content
     const extractKeyFromContent = (content) => {
@@ -72,7 +82,6 @@ export function useSongbook() {
         if (!song) return null;
 
         try {
-            // Option 1: Use stored fileUrl (faster)
             if (song.fileUrl) {
                 const response = await fetch(song.fileUrl);
                 if (!response.ok) throw new Error(`Error loading ${song.filename}`);
@@ -80,7 +89,6 @@ export function useSongbook() {
                 
                 const key = extractKeyFromContent(content);
                 
-                // Update song with extracted key if not present
                 if (!song.key && key) {
                     setAllSongs(prev => prev.map(s =>
                         s.id === songId ? { ...s, key } : s
@@ -91,7 +99,6 @@ export function useSongbook() {
                 return content;
             }
 
-            // Option 2: Generate URL from Storage path (fallback)
             const fileRef = ref(storage, `charts/${song.filename}`);
             const url = await getDownloadURL(fileRef);
             
@@ -137,16 +144,19 @@ export function useSongbook() {
         setSemitoneShift(prev => ({ ...prev, [songId]: newShift }));
     }, []);
 
-    // Songs filtered by search
+    // Songs filtered by search (includes tags!)
     const filteredSongs = useMemo(() => {
         if (!searchTerm.trim()) return allSongs;
 
         const term = searchTerm.toLowerCase();
-        return allSongs.filter(song =>
-            song.title.toLowerCase().includes(term) ||
-            (song.artist && song.artist.toLowerCase().includes(term)) ||
-            (song.tags && song.tags.some(tag => tag.includes(term)))
-        );
+        return allSongs.filter(song => {
+            if (song.title.toLowerCase().includes(term)) return true;
+            if (song.artist && song.artist.toLowerCase().includes(term)) return true;
+            if (song.tags && Array.isArray(song.tags)) {
+                if (song.tags.some(tag => tag.toLowerCase().includes(term))) return true;
+            }
+            return false;
+        });
     }, [allSongs, searchTerm]);
 
     // Selected songs with content and transposition

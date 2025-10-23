@@ -35,8 +35,6 @@ const bucket = getStorage().bucket();
 
 // Extract metadata from ChordPro file (matching bash script behavior)
 function extractMetadata(content, filename) {
-  const lines = content.split('\n');
-  
   // Extract title
   const titleMatch = content.match(/\{title:\s*([^}]+)\}/i);
   const title = titleMatch ? titleMatch[1].trim() : '';
@@ -81,15 +79,21 @@ async function syncSongs() {
     for (const filename of files) {
       try {
         const filePath = path.join(chartsDir, filename);
-        const content = fs.readFileSync(filePath, 'utf8');
+        
+        // Read file with explicit UTF-8 encoding
+        const content = fs.readFileSync(filePath, { encoding: 'utf8' });
         const metadata = extractMetadata(content, filename);
 
         console.log(`Processing: ${metadata.title || filename}...`);
 
-        // Upload to Storage
+        // Create a UTF-8 Buffer from content
+        const contentBuffer = Buffer.from(content, 'utf8');
+        
+        // Upload to Storage using .save() method with Buffer
         const destination = `charts/${filename}`;
-        await bucket.upload(filePath, {
-          destination,
+        const file = bucket.file(destination);
+        
+        await file.save(contentBuffer, {
           metadata: {
             contentType: 'text/plain; charset=utf-8',
             cacheControl: 'public, max-age=3600',
@@ -97,10 +101,11 @@ async function syncSongs() {
               songId: metadata.id,
               title: metadata.title
             }
-          }
+          },
+          resumable: false // Faster for small files
         });
 
-        const file = bucket.file(destination);
+        // Make file public
         await file.makePublic();
         const publicUrl = `https://storage.googleapis.com/${bucket.name}/${destination}`;
 
@@ -131,8 +136,8 @@ async function syncSongs() {
       }
     }
 
-    // Write index.json (matching bash script format)
-    fs.writeFileSync(indexPath, JSON.stringify(indexData, null, 2), 'utf8');
+    // Write index.json locally with UTF-8
+    fs.writeFileSync(indexPath, JSON.stringify(indexData, null, 2), { encoding: 'utf8' });
     console.log(`\n📝 index.json updated with ${indexData.length} songs`);
 
     console.log(`\n🎉 Sync complete!`);
