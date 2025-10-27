@@ -138,7 +138,29 @@ async function syncSongs() {
 
     // Write index.json locally with UTF-8
     fs.writeFileSync(indexPath, JSON.stringify(indexData, null, 2), { encoding: 'utf8' });
-    console.log(`\n📝 index.json updated with ${indexData.length} songs`);
+    console.log(`\n📝 Local index.json updated with ${indexData.length} songs`);
+
+    // Upload index.json to Firebase Storage
+    try {
+      const indexBuffer = Buffer.from(JSON.stringify(indexData, null, 2), 'utf8');
+      const indexFile = bucket.file('index.json');
+      
+      await indexFile.save(indexBuffer, {
+        metadata: {
+          contentType: 'application/json; charset=utf-8',
+          cacheControl: 'public, max-age=300' // 5 minutes cache
+        },
+        resumable: false
+      });
+
+      await indexFile.makePublic();
+      const indexUrl = `https://storage.googleapis.com/${bucket.name}/index.json`;
+
+      console.log(`📤 index.json uploaded to Firebase Storage`);
+      console.log(`🔗 ${indexUrl}`);
+    } catch (err) {
+      console.error(`⚠️  Error uploading index.json:`, err.message);
+    }
 
     console.log(`\n🎉 Sync complete!`);
     console.log(`✅ Synced: ${syncedCount} songs`);
