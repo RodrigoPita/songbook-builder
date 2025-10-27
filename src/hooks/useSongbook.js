@@ -1,7 +1,6 @@
 import { useState, useEffect, useMemo, useCallback } from 'react';
-import { collection, getDocs, query, orderBy } from 'firebase/firestore';
 import { ref, getDownloadURL } from 'firebase/storage';
-import { db, storage } from '../config/firebase';
+import { storage } from '../config/firebase';
 
 export function useSongbook() {
     // State for songs and loading
@@ -15,38 +14,44 @@ export function useSongbook() {
     const [semitoneShift, setSemitoneShift] = useState({});
     const [searchTerm, setSearchTerm] = useState('');
 
-    // Load metadata from Firestore
+    // Load metadata from Firebase Storage (index.json)
     const loadSongsMetadata = useCallback(async () => {
         try {
             setLoading(true);
             setError(null);
 
-            const songsQuery = query(
-                collection(db, 'songs'),
-                orderBy('title', 'asc')
-            );
+            // Build Storage URL from bucket name
+            const bucketName = import.meta.env.VITE_FIREBASE_STORAGE_BUCKET;
+            const storageUrl = `https://storage.googleapis.com/${bucketName}`;
+            const indexUrl = `${storageUrl}/index.json`;
             
-            const querySnapshot = await getDocs(songsQuery);
+            console.log('Loading index from:', indexUrl);
             
-            const songs = querySnapshot.docs.map(doc => {
-                const data = doc.data();
-                return {
-                    id: doc.id,
-                    title: data.title || '',
-                    artist: data.artist || '',
-                    key: data.key || '',
-                    tags: data.tags || [],
-                    filename: data.filename || '',
-                    fileUrl: data.fileUrl || '',
-                    content: null
-                };
-            });
+            const response = await fetch(indexUrl);
+            
+            if (!response.ok) {
+                throw new Error(`Failed to load index.json: ${response.status}`);
+            }
+            
+            const metadata = await response.json();
+            
+            // Transform to app format
+            const songs = metadata.map(song => ({
+                id: song.id,
+                title: song.title || '',
+                artist: song.artist || '',
+                tags: song.tags || [],
+                filename: song.filename || '',
+                fileUrl: `${storageUrl}/charts/${song.filename}`,
+                key: '',
+                content: null
+            }));
 
-            console.log('Songs loaded from Firebase:', songs.length);
+            console.log('Songs loaded from Firebase Storage:', songs.length);
             setAllSongs(songs);
 
         } catch (err) {
-            console.error('Error loading songs from Firebase:', err);
+            console.error('Error loading songs from Firebase Storage:', err);
             setError(err.message);
         } finally {
             setLoading(false);
