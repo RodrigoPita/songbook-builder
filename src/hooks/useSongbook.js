@@ -1,6 +1,7 @@
 import { useState, useEffect, useMemo, useCallback } from 'react';
+import { collection, getDocs, query, orderBy } from 'firebase/firestore';
 import { ref, getDownloadURL } from 'firebase/storage';
-import { storage } from '../config/firebase';
+import { db, storage } from '../config/firebase';
 
 export function useSongbook() {
     // State for songs and loading
@@ -14,51 +15,47 @@ export function useSongbook() {
     const [semitoneShift, setSemitoneShift] = useState({});
     const [searchTerm, setSearchTerm] = useState('');
 
-    // Load metadata from Firebase Storage (index.json)
+    // Load metadata from Firestore
     const loadSongsMetadata = useCallback(async () => {
         try {
             setLoading(true);
             setError(null);
 
-            // Build Storage URL from bucket name
-            const bucketName = import.meta.env.VITE_FIREBASE_STORAGE_BUCKET;
-            const storageUrl = `https://storage.googleapis.com/${bucketName}`;
-            const indexUrl = `${storageUrl}/index.json`;
+            // Query Firestore for all songs, ordered by title
+            const songsQuery = query(
+                collection(db, 'songs'),
+                orderBy('title', 'asc')
+            );
             
-            console.log('Loading index from:', indexUrl);
+            const querySnapshot = await getDocs(songsQuery);
             
-            const response = await fetch(indexUrl);
-            
-            if (!response.ok) {
-                throw new Error(`Failed to load index.json: ${response.status}`);
-            }
-            
-            const metadata = await response.json();
-            
-            // Transform to app format
-            const songs = metadata.map(song => ({
-                id: song.id,
-                title: song.title || '',
-                artist: song.artist || '',
-                tags: song.tags || [],
-                filename: song.filename || '',
-                fileUrl: `${storageUrl}/charts/${song.filename}`,
-                key: '',
-                content: null
-            }));
+            // Transform Firestore documents to app format
+            const songs = querySnapshot.docs.map(doc => {
+                const data = doc.data();
+                return {
+                    id: doc.id,
+                    title: data.title || '',
+                    artist: data.artist || '',
+                    tags: data.tags || [],
+                    filename: data.filename || '',
+                    fileUrl: data.fileUrl || '',
+                    key: '', // Will be extracted when loading content
+                    content: null
+                };
+            });
 
-            console.log('Songs loaded from Firebase Storage:', songs.length);
+            console.log('Songs loaded from Firestore:', songs.length);
             setAllSongs(songs);
 
         } catch (err) {
-            console.error('Error loading songs from Firebase Storage:', err);
+            console.error('Error loading songs from Firestore:', err);
             setError(err.message);
         } finally {
             setLoading(false);
         }
     }, []);
 
-    // Load on mount
+    // Load on mount with cleanup
     useEffect(() => {
         let isMounted = true;
 
@@ -87,6 +84,7 @@ export function useSongbook() {
         if (!song) return null;
 
         try {
+            // Use fileUrl from Firestore
             if (song.fileUrl) {
                 const response = await fetch(song.fileUrl);
                 if (!response.ok) throw new Error(`Error loading ${song.filename}`);
@@ -94,6 +92,7 @@ export function useSongbook() {
                 
                 const key = extractKeyFromContent(content);
                 
+                // Update song with extracted key if not present
                 if (!song.key && key) {
                     setAllSongs(prev => prev.map(s =>
                         s.id === songId ? { ...s, key } : s
@@ -104,6 +103,7 @@ export function useSongbook() {
                 return content;
             }
 
+            // Fallback: Generate URL from Storage path
             const fileRef = ref(storage, `charts/${song.filename}`);
             const url = await getDownloadURL(fileRef);
             
@@ -155,11 +155,17 @@ export function useSongbook() {
 
         const term = searchTerm.toLowerCase();
         return allSongs.filter(song => {
+            // Search in title
             if (song.title.toLowerCase().includes(term)) return true;
+            
+            // Search in artist
             if (song.artist && song.artist.toLowerCase().includes(term)) return true;
+            
+            // Search in tags
             if (song.tags && Array.isArray(song.tags)) {
                 if (song.tags.some(tag => tag.toLowerCase().includes(term))) return true;
             }
+            
             return false;
         });
     }, [allSongs, searchTerm]);
