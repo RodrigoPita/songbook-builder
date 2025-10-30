@@ -1,10 +1,11 @@
 #!/usr/bin/env node
 
 /**
- * Script to automatically sync songs to Firebase
- * Scans public/charts/*.cho files and updates both:
- *   1. public/index.json (for backup)
- *   2. Firebase Firestore + Storage
+ * Bidirectional sync script for Firebase
+ * 
+ * Syncs songs in both directions:
+ *   1. Local files (public/charts/*.cho) → Firebase (Storage + Firestore)
+ *   2. Firebase Storage *.cho files → Firestore (if missing)
  * 
  * Usage:
  *   node scripts/syncSongs.js
@@ -33,17 +34,14 @@ initializeApp({
 const db = getFirestore();
 const bucket = getStorage().bucket();
 
-// Extract metadata from ChordPro file (matching bash script behavior)
+// Extract metadata from ChordPro content
 function extractMetadata(content, filename) {
-  // Extract title
   const titleMatch = content.match(/\{title:\s*([^}]+)\}/i);
   const title = titleMatch ? titleMatch[1].trim() : '';
-  
-  // Extract artist
+
   const artistMatch = content.match(/\{artist:\s*([^}]+)\}/i);
   const artist = artistMatch ? artistMatch[1].trim() : '';
-  
-  // Extract tags (comma-separated list)
+
   const tagsMatch = content.match(/\{tags:\s*([^}]+)\}/i);
   let tags = [];
   if (tagsMatch) {
@@ -52,47 +50,46 @@ function extractMetadata(content, filename) {
       .map(tag => tag.trim())
       .filter(tag => tag.length > 0);
   }
-  
-  // Generate ID from filename
+
   const id = filename.replace('.cho', '');
-  
+
   return { id, title, artist, filename, tags };
 }
 
 async function syncSongs() {
   try {
-    console.log('🔄 Starting sync...\n');
+    console.log('🔄 Starting bidirectional sync...\n');
 
     const chartsDir = path.join(__dirname, '../public/charts');
     const indexPath = path.join(__dirname, '../public/index.json');
 
-    // Get all .cho files
-    const files = fs.readdirSync(chartsDir)
-      .filter(file => file.endsWith('.cho'))
-      .sort();
+    // ========================================
+    // STEP 1: Sync LOCAL → FIREBASE
+    // ========================================
+    console.log('📤 Step 1: Syncing local files to Firebase...\n');
 
-    console.log(`📁 Found ${files.length} .cho files\n`);
+    const localFiles = fs.existsSync(chartsDir)
+      ? fs.readdirSync(chartsDir).filter(file => file.endsWith('.cho')).sort()
+      : [];
+
+    console.log(`📁 Found ${localFiles.length} local .cho files`);
 
     const indexData = [];
-    let syncedCount = 0;
+    let uploadedCount = 0;
 
-    for (const filename of files) {
+    for (const filename of localFiles) {
       try {
         const filePath = path.join(chartsDir, filename);
-        
-        // Read file with explicit UTF-8 encoding
         const content = fs.readFileSync(filePath, { encoding: 'utf8' });
         const metadata = extractMetadata(content, filename);
 
-        console.log(`Processing: ${metadata.title || filename}...`);
+        console.log(`  ↑ Uploading: ${metadata.title || filename}...`);
 
-        // Create a UTF-8 Buffer from content
+        // Upload to Storage
         const contentBuffer = Buffer.from(content, 'utf8');
-        
-        // Upload to Storage using .save() method with Buffer
         const destination = `charts/${filename}`;
         const file = bucket.file(destination);
-        
+
         await file.save(contentBuffer, {
           metadata: {
             contentType: 'text/plain; charset=utf-8',
@@ -102,10 +99,9 @@ async function syncSongs() {
               title: metadata.title
             }
           },
-          resumable: false // Faster for small files
+          resumable: false
         });
 
-        // Make file public
         await file.makePublic();
         const publicUrl = `https://storage.googleapis.com/${bucket.name}/${destination}`;
 
@@ -119,7 +115,6 @@ async function syncSongs() {
           updatedAt: new Date()
         }, { merge: true });
 
-        // Add to index.json (matching bash script format exactly)
         indexData.push({
           id: metadata.id,
           title: metadata.title,
@@ -128,27 +123,129 @@ async function syncSongs() {
           tags: metadata.tags
         });
 
-        console.log(`✅ ${metadata.title || filename} synced`);
-        syncedCount++;
+        uploadedCount++;
 
       } catch (err) {
-        console.error(`❌ Error syncing ${filename}:`, err.message);
+        console.error(`  ✗ Error uploading ${filename}:`, err.message);
       }
     }
 
-    // Write index.json locally with UTF-8
-    fs.writeFileSync(indexPath, JSON.stringify(indexData, null, 2), { encoding: 'utf8' });
-    console.log(`\n📝 Local index.json updated with ${indexData.length} songs`);
+    console.log(`\n✅ Uploaded ${uploadedCount} local files\n`);
 
-    // Upload index.json to Firebase Storage
+    // ========================================
+    // STEP 2: Sync FIREBASE STORAGE → FIRESTORE
+    // ========================================
+    console.log('📥 Step 2: Checking for songs in Storage not in Firestore...\n');
+
+    // Get all .cho files from Storage
+    const [storageFiles] = await bucket.getFiles({ prefix: 'charts/' });
+    const choFilesInStorage = storageFiles
+      .filter(file => file.name.endsWith('.cho'))
+      .map(file => file.name.replace('charts/', ''));
+
+    console.log(`🗄️  Found ${choFilesInStorage.length} .cho files in Storage`);
+
+    // Get all song IDs from Firestore
+    const firestoreSnapshot = await db.collection('songs').get();
+    const firestoreIds = new Set(firestoreSnapshot.docs.map(doc => doc.id));
+
+    console.log(`📊 Found ${firestoreIds.size} documents in Firestore`);
+
+    // Find songs in Storage but not in Firestore
+    const missingInFirestore = [];
+    for (const filename of choFilesInStorage) {
+      const id = filename.replace('.cho', '');
+      if (!firestoreIds.has(id)) {
+        missingInFirestore.push(filename);
+      }
+    }
+
+    if (missingInFirestore.length > 0) {
+      console.log(`\n⚠️  Found ${missingInFirestore.length} songs in Storage missing from Firestore`);
+
+      for (const filename of missingInFirestore) {
+        try {
+          console.log(`  ↓ Syncing from Storage: ${filename}...`);
+
+          // Download file from Storage
+          const file = bucket.file(`charts/${filename}`);
+          const [content] = await file.download();
+          const contentStr = content.toString('utf8');
+          const metadata = extractMetadata(contentStr, filename);
+
+          // Make sure it's public
+          await file.makePublic();
+          const publicUrl = `https://storage.googleapis.com/${bucket.name}/charts/${filename}`;
+
+          // Create Firestore document
+          await db.collection('songs').doc(metadata.id).set({
+            title: metadata.title,
+            artist: metadata.artist,
+            tags: metadata.tags,
+            filename: metadata.filename,
+            fileUrl: publicUrl,
+            updatedAt: new Date(),
+            syncedFromStorage: true
+          });
+
+          // Add to index
+          if (!indexData.find(s => s.id === metadata.id)) {
+            indexData.push({
+              id: metadata.id,
+              title: metadata.title,
+              artist: metadata.artist,
+              filename: metadata.filename,
+              tags: metadata.tags
+            });
+          }
+
+          console.log(`  ✓ Synced: ${metadata.title || filename}`);
+
+        } catch (err) {
+          console.error(`  ✗ Error syncing ${filename}:`, err.message);
+        }
+      }
+    } else {
+      console.log('✅ All Storage files are in Firestore');
+    }
+
+    // ========================================
+    // STEP 3: Update index.json from Firestore
+    // ========================================
+    console.log('\n📝 Step 3: Generating index.json from Firestore...\n');
+
+    // Get ALL songs from Firestore (source of truth)
+    const allSongsSnapshot = await db.collection('songs').orderBy('title', 'asc').get();
+    const finalIndexData = allSongsSnapshot.docs.map(doc => {
+      const data = doc.data();
+      return {
+        id: doc.id,
+        title: data.title || '',
+        artist: data.artist || '',
+        filename: data.filename || '',
+        tags: data.tags || []
+      };
+    });
+
+    console.log(`📊 Retrieved ${finalIndexData.length} songs from Firestore`);
+
+    // Write local index.json
+    if (fs.existsSync(path.dirname(indexPath))) {
+      fs.writeFileSync(indexPath, JSON.stringify(finalIndexData, null, 2), { encoding: 'utf8' });
+      console.log(`✓ Local index.json updated (${finalIndexData.length} songs)`);
+    } else {
+      console.log(`⚠️  Skipping local index.json (public/ folder not found)`);
+    }
+
+    // Upload index.json to Storage
     try {
-      const indexBuffer = Buffer.from(JSON.stringify(indexData, null, 2), 'utf8');
+      const indexBuffer = Buffer.from(JSON.stringify(finalIndexData, null, 2), 'utf8');
       const indexFile = bucket.file('index.json');
-      
+
       await indexFile.save(indexBuffer, {
         metadata: {
           contentType: 'application/json; charset=utf-8',
-          cacheControl: 'public, max-age=300' // 5 minutes cache
+          cacheControl: 'public, max-age=300'
         },
         resumable: false
       });
@@ -156,16 +253,22 @@ async function syncSongs() {
       await indexFile.makePublic();
       const indexUrl = `https://storage.googleapis.com/${bucket.name}/index.json`;
 
-      console.log(`📤 index.json uploaded to Firebase Storage`);
-      console.log(`🔗 ${indexUrl}`);
+      console.log(`✓ index.json uploaded to Storage`);
+      console.log(`  ${indexUrl}`);
     } catch (err) {
-      console.error(`⚠️  Error uploading index.json:`, err.message);
+      console.error(`✗ Error uploading index.json:`, err.message);
     }
 
-    console.log(`\n🎉 Sync complete!`);
-    console.log(`✅ Synced: ${syncedCount} songs`);
-    console.log(`📍 Firebase: Firestore + Storage`);
-    console.log(`📍 Local: index.json updated`);
+    // ========================================
+    // SUMMARY
+    // ========================================
+    console.log(`\n${'='.repeat(50)}`);
+    console.log('🎉 Sync complete!');
+    console.log(`${'='.repeat(50)}`);
+    console.log(`📤 Local → Firebase: ${uploadedCount} files`);
+    console.log(`📥 Storage → Firestore: ${missingInFirestore.length} files`);
+    console.log(`📊 Total in Firestore: ${finalIndexData.length} songs`);
+    console.log(`${'='.repeat(50)}\n`);
 
   } catch (err) {
     console.error('💥 Sync failed:', err);
