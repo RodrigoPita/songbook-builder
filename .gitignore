@@ -31,3 +31,6 @@ Thumbs.db
 
 # Firebase Admin credentials
 serviceAccountKey.json
+
+# gh-pages
+.cache/
