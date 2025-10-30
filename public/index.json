@@ -172,22 +172,22 @@
     ]
   },
   {
-    "id": "cancao_de_pedro",
-    "title": "Canção De Pedro",
-    "artist": "Bruno Camurati",
-    "filename": "cancao_de_pedro.cho",
-    "tags": [
-      "ação de graças",
-      "missão"
-    ]
-  },
-  {
     "id": "caneta_e_papel",
     "title": "Caneta E Papel",
     "artist": "Os Arrais",
     "filename": "caneta_e_papel.cho",
     "tags": [
       "intercessão",
+      "missão"
+    ]
+  },
+  {
+    "id": "cancao_de_pedro",
+    "title": "Canção De Pedro",
+    "artist": "Bruno Camurati",
+    "filename": "cancao_de_pedro.cho",
+    "tags": [
+      "ação de graças",
       "missão"
     ]
   },
@@ -231,15 +231,6 @@
     ]
   },
   {
-    "id": "como_es_lindo",
-    "title": "Como És Lindo",
-    "artist": "Vida Reluz",
-    "filename": "como_es_lindo.cho",
-    "tags": [
-      "comunhão"
-    ]
-  },
-  {
     "id": "como_nao_me_apaixonar",
     "title": "Como Não Me Apaixonar",
     "artist": "Colo De Deus",
@@ -255,6 +246,15 @@
     "filename": "como_sao_belos.cho",
     "tags": [
       "aclamação"
+    ]
+  },
+  {
+    "id": "como_es_lindo",
+    "title": "Como És Lindo",
+    "artist": "Vida Reluz",
+    "filename": "como_es_lindo.cho",
+    "tags": [
+      "comunhão"
     ]
   },
   {

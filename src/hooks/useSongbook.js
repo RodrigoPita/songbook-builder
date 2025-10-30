@@ -1,4 +1,7 @@
 import { useState, useEffect, useMemo, useCallback } from 'react';
+import { collection, getDocs, query, orderBy } from 'firebase/firestore';
+import { ref, getDownloadURL } from 'firebase/storage';
+import { db, storage } from '../config/firebase';
 
 export function useSongbook() {
     // State for songs and loading
@@ -12,47 +15,60 @@ export function useSongbook() {
     const [semitoneShift, setSemitoneShift] = useState({});
     const [searchTerm, setSearchTerm] = useState('');
 
-    // Load metadata on mount
-    useEffect(() => {
-        loadSongsMetadata();
-    }, []);
-
-    const loadSongsMetadata = async () => {
+    // Load metadata from Firestore
+    const loadSongsMetadata = useCallback(async () => {
         try {
             setLoading(true);
             setError(null);
 
-            const indexPath = `${import.meta.env.BASE_URL}index.json`;
-            const response = await fetch(indexPath);
+            // Query Firestore for all songs, ordered by title
+            const songsQuery = query(
+                collection(db, 'songs'),
+                orderBy('title', 'asc')
+            );
+            
+            const querySnapshot = await getDocs(songsQuery);
+            
+            // Transform Firestore documents to app format
+            const songs = querySnapshot.docs.map(doc => {
+                const data = doc.data();
+                return {
+                    id: doc.id,
+                    title: data.title || '',
+                    artist: data.artist || '',
+                    tags: data.tags || [],
+                    filename: data.filename || '',
+                    fileUrl: data.fileUrl || '',
+                    key: '', // Will be extracted when loading content
+                    content: null
+                };
+            });
 
-            if (!response.ok) {
-                throw new Error(`Error ${response.status}: Could not load index.json`);
-            }
-
-            const metadata = await response.json();
-
-            // Transform metadata to the format expected by the app
-            const songs = metadata.map(song => ({
-                id: song.id,
-                title: song.title,
-                artist: song.artist || '',
-                key: song.key || '',
-                filename: song.filename,
-                tags: Array.isArray(song.tags) 
-                    ? song.tags.map(m => m.toLowerCase().trim())
-                    : (song.tags ? [song.tags.toLowerCase().trim()] : []),
-                content: null
-            }));
-
+            console.log('Songs loaded from Firestore:', songs.length);
             setAllSongs(songs);
 
         } catch (err) {
-            console.error('Error loading metadata:', err);
+            console.error('Error loading songs from Firestore:', err);
             setError(err.message);
         } finally {
             setLoading(false);
         }
-    };
+    }, []);
+
+    // Load on mount with cleanup
+    useEffect(() => {
+        let isMounted = true;
+
+        loadSongsMetadata().catch(err => {
+            if (isMounted) {
+                console.error('Failed to load songs:', err);
+            }
+        });
+
+        return () => {
+            isMounted = false;
+        };
+    }, [loadSongsMetadata]);
 
     // Extract key from ChordPro content
     const extractKeyFromContent = (content) => {
@@ -60,7 +76,7 @@ export function useSongbook() {
         return keyMatch ? keyMatch[1] : null;
     };
 
-    // Load content of a specific song
+    // Load content of a specific song from Firebase Storage
     const loadSongContent = useCallback(async (songId) => {
         if (songsContent[songId]) return songsContent[songId];
 
@@ -68,23 +84,42 @@ export function useSongbook() {
         if (!song) return null;
 
         try {
-            const songPath = `${import.meta.env.BASE_URL}charts/${song.filename}`;
-            const response = await fetch(songPath);
+            // Use fileUrl from Firestore
+            if (song.fileUrl) {
+                const response = await fetch(song.fileUrl);
+                if (!response.ok) throw new Error(`Error loading ${song.filename}`);
+                const content = await response.text();
+                
+                const key = extractKeyFromContent(content);
+                
+                // Update song with extracted key if not present
+                if (!song.key && key) {
+                    setAllSongs(prev => prev.map(s =>
+                        s.id === songId ? { ...s, key } : s
+                    ));
+                }
 
-            if (!response.ok) {
-                throw new Error(`Error loading ${song.filename}`);
+                setSongsContent(prev => ({ ...prev, [songId]: content }));
+                return content;
             }
 
+            // Fallback: Generate URL from Storage path
+            const fileRef = ref(storage, `charts/${song.filename}`);
+            const url = await getDownloadURL(fileRef);
+            
+            const response = await fetch(url);
+            if (!response.ok) throw new Error(`Error loading ${song.filename}`);
+            
             const content = await response.text();
             const key = extractKeyFromContent(content);
 
-            // Update allSongs with extracted key
-            setAllSongs(prev => prev.map(s =>
-                s.id === songId ? { ...s, key } : s
-            ));
+            if (!song.key && key) {
+                setAllSongs(prev => prev.map(s =>
+                    s.id === songId ? { ...s, key } : s
+                ));
+            }
 
             setSongsContent(prev => ({ ...prev, [songId]: content }));
-
             return content;
 
         } catch (err) {
@@ -106,7 +141,6 @@ export function useSongbook() {
             }
         });
 
-        // Initialize transposition at 0
         setSemitoneShift(prev => ({ ...prev, [songId]: prev[songId] ?? 0 }));
     }, [loadSongContent]);
 
@@ -115,16 +149,25 @@ export function useSongbook() {
         setSemitoneShift(prev => ({ ...prev, [songId]: newShift }));
     }, []);
 
-    // Songs filtered by search
+    // Songs filtered by search (includes tags!)
     const filteredSongs = useMemo(() => {
         if (!searchTerm.trim()) return allSongs;
 
         const term = searchTerm.toLowerCase();
-        return allSongs.filter(song =>
-            song.title.toLowerCase().includes(term) ||
-            (song.artist && song.artist.toLowerCase().includes(term)) ||
-            (song.tags && song.tags.some(tag => tag.includes(term)))
-        );
+        return allSongs.filter(song => {
+            // Search in title
+            if (song.title.toLowerCase().includes(term)) return true;
+            
+            // Search in artist
+            if (song.artist && song.artist.toLowerCase().includes(term)) return true;
+            
+            // Search in tags
+            if (song.tags && Array.isArray(song.tags)) {
+                if (song.tags.some(tag => tag.toLowerCase().includes(term))) return true;
+            }
+            
+            return false;
+        });
     }, [allSongs, searchTerm]);
 
     // Selected songs with content and transposition

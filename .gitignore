@@ -14,6 +14,8 @@ dist/
 dist-ssr
 *.local
 .env*
+.env.local
+.env.*.local
 
 # Editor directories and files
 .vscode/*
@@ -26,3 +28,9 @@ Thumbs.db
 *.njsproj
 *.sln
 *.sw?
+
+# Firebase Admin credentials
+serviceAccountKey.json
+
+# gh-pages
+.cache/
