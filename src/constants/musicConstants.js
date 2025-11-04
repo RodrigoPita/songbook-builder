@@ -22,4 +22,34 @@ export const HARMONIC_FIELD = {
     "B":  ["B",  "C#m", "D#m", "E",  "F#", "G#m", "A#°"],
 };
 
+export const RELATIVE_MINORS = {
+    "Am":  "C",
+    "Bbm": "Db",
+    "Bm":  "D",
+    "Cm":  "Eb",
+    "C#m": "E",
+    "Dm":  "F",
+    "D#m": "F#", 
+    "Em":  "G",
+    "Fm":  "Ab",
+    "F#m": "A",
+    "Gm":  "Bb",
+    "G#m": "B",
+};
+
+export const MAJOR_TO_RELATIVE_MINOR = {
+    "C":  "Am",
+    "Db": "Bbm",
+    "D":  "Bm",
+    "Eb": "Cm",
+    "E":  "C#m",
+    "F":  "Dm",
+    "F#": "D#m", 
+    "G":  "Em",
+    "Ab": "Fm",
+    "A":  "F#m",
+    "Bb": "Gm",
+    "B":  "G#m",
+};
+
 export const MAJOR_KEYS_FOR_DEGREE = Object.keys(HARMONIC_FIELD);
