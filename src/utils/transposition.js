@@ -4,8 +4,14 @@ import {
     NOTES_FLAT,
     SHARP_KEYS,
     HARMONIC_FIELD,
+    RELATIVE_MINORS,
+    MAJOR_TO_RELATIVE_MINOR,
     MAJOR_KEYS_FOR_DEGREE
 } from '../constants/musicConstants';
+
+export const isMinorKey = (key) => {
+    return key.endsWith('m');
+};
 
 // Parse chord into components (root, quality, modifier, bass)
 export function getBaseChordInfo(chord) {
@@ -35,20 +41,53 @@ export function getBaseChordInfo(chord) {
     return { root, quality, modifier, bassNote, originalParen: !!optionalParenMatch };
 }
 
+export const getSemitoneShift = (originalKey, targetKey) => {
+    const baseOriginalKey = isMinorKey(originalKey) 
+        ? RELATIVE_MINORS[originalKey] || originalKey
+        : originalKey;
+
+    const baseTargetKey = isMinorKey(targetKey)
+        ? RELATIVE_MINORS[targetKey] || targetKey
+        : targetKey;
+
+    const originalIndex = SEMITONE_MAP[baseOriginalKey];
+    const targetIndex = SEMITONE_MAP[baseTargetKey];
+
+    if (originalIndex === undefined || targetIndex === undefined) {
+        console.warn(`Error: Base original key '${baseOriginalKey}' or target key '${baseTargetKey}' not found in SEMITONE_MAP.`);
+        return 0;
+    }
+
+    let shift = targetIndex - originalIndex;
+    if (shift > 6) shift -= 12;
+    if (shift < -6) shift += 12;
+    
+    return shift;
+};
+
 // Get target key after transposition
 export function getTargetKeyFromShift(originalKey, shift) {
-    const originalIndex = SEMITONE_MAP[originalKey];
+    const wasOriginalKeyMinor = isMinorKey(originalKey);
+
+    const keyForShiftCalculation = wasOriginalKeyMinor 
+        ? RELATIVE_MINORS[originalKey] || originalKey.replace('m', '') // Fallback: remove 'm' if not in map
+        : originalKey;
+
+    const originalIndex = SEMITONE_MAP[keyForShiftCalculation];
     if (originalIndex === undefined) return originalKey;
 
     const newChromaticIndex = (originalIndex + shift + 12) % 12;
-    const targetKeySharp = NOTES_SHARP[newChromaticIndex];
+    let majorTargetKeyName = NOTES_SHARP[newChromaticIndex];
 
-    // Prefer flats for flat keys
-    if (!SHARP_KEYS.includes(targetKeySharp) && NOTES_FLAT[newChromaticIndex] !== targetKeySharp) {
-        return NOTES_FLAT[newChromaticIndex];
+    if (!SHARP_KEYS.includes(majorTargetKeyName) && NOTES_FLAT[newChromaticIndex] !== majorTargetKeyName) {
+        majorTargetKeyName = NOTES_FLAT[newChromaticIndex];
     }
 
-    return targetKeySharp;
+    if (wasOriginalKeyMinor) {
+        return MAJOR_TO_RELATIVE_MINOR[majorTargetKeyName] || majorTargetKeyName + 'm';
+    }
+
+    return majorTargetKeyName;
 }
 
 // Get diatonic degree of chord in key (0-6 for I-VII, -1 if not diatonic)
@@ -87,23 +126,25 @@ const getDiatonicDegree = (chord, originalKey) => {
 };
 
 // Apply chromatic transposition to a note
-const applyChromaticShift = (rootNote, shift, targetKey) => {
+const applyChromaticShift = (rootNote, shift, targetKeyForSpelling) => {
     if (!rootNote) return null;
 
     const originalNoteIndex = SEMITONE_MAP[rootNote];
     if (originalNoteIndex === undefined) return rootNote;
 
     const newChromaticIndex = (originalNoteIndex + shift + 12) % 12;
-    const isTargetFlatKey = !SHARP_KEYS.includes(targetKey);
 
-    let newNote = NOTES_SHARP[newChromaticIndex];
+    const baseTargetMajorKey = isMinorKey(targetKeyForSpelling)
+        ? RELATIVE_MINORS[targetKeyForSpelling] || targetKeyForSpelling.replace('m', '')
+        : targetKeyForSpelling;
 
-    // Prefer flats for flat keys
-    if (isTargetFlatKey && NOTES_FLAT[newChromaticIndex] !== NOTES_SHARP[newChromaticIndex]) {
-        newNote = NOTES_FLAT[newChromaticIndex];
+    const preferSharps = SHARP_KEYS.includes(baseTargetMajorKey);
+
+    if (preferSharps) {
+        return NOTES_SHARP[newChromaticIndex];
+    } else {
+        return NOTES_FLAT[newChromaticIndex];
     }
-
-    return newNote;
 };
 
 // Transpose chord using hybrid diatonic/chromatic logic
