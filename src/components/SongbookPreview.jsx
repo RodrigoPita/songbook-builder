@@ -1,4 +1,4 @@
-import { FileText, Download, Plus, Minus, ListOrdered, X } from 'lucide-react';
+import { FileText, Download, Plus, Minus, ListOrdered, RotateCcw } from 'lucide-react';
 import SongPreviewBlock from './SongPreviewBlock';
 
 /**
@@ -85,7 +85,7 @@ const SongbookPreview = ({
                                     `}
                                     title="Reset"
                                     >
-                                    <X className="w-4 h-4" />
+                                    <RotateCcw className="w-4 h-4" />
                                 </button>
                             </div>
                             <SongPreviewBlock 
