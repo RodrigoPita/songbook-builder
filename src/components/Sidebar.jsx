@@ -11,7 +11,6 @@ import { ListOrdered, Search, Music, X } from 'lucide-react';
  * @param {Function} props.onToggleSong - Function to call when a song is clicked.
  * @param {string} props.searchTerm - The current value of the search input.
  * @param {Function} props.onSearchChange - Function to update the search term.
- * @param {number} props.totalSongCount - The total number of songs available.
  */
 const Sidebar = ({
     isOpen,
@@ -20,8 +19,7 @@ const Sidebar = ({
     selectedSongIds,
     onToggleSong,
     searchTerm,
-    onSearchChange,
-    totalSongCount
+    onSearchChange
 }) => {
     return (
         <>
@@ -43,7 +41,7 @@ const Sidebar = ({
             >
                 <h2 className="text-xl font-semibold mb-4 text-gray-700 border-b pb-2 flex items-center">
                     <ListOrdered className="w-5 h-5 mr-2" />
-                    Song Index ({totalSongCount})
+                    Song Index ({songs.length})
                 </h2>
 
                 {/* Search Bar */}

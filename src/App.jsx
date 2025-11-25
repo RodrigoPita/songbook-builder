@@ -74,7 +74,6 @@ const App = () => {
                     onToggleSong={toggleSongSelection}
                     searchTerm={searchTerm}
                     onSearchChange={setSearchTerm}
-                    totalSongCount={allSongs.length}
                 />
                 <SongbookPreview
                     songs={selectedSongs}
