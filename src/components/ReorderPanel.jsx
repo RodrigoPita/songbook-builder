@@ -91,14 +91,14 @@ const ReorderPanel = ({ isOpen, onClose, songs, onReorder }) => {
 
     return (
         <>
-            {/* Backdrop */}
+            {/* Backdrop - Higher z-index to cover sidebar too */}
             <div
-                className="fixed inset-0 bg-black bg-opacity-50 z-40 print:hidden"
+                className="fixed inset-0 bg-black bg-opacity-50 z-[60] print:hidden"
                 onClick={onClose}
             />
 
-            {/* Panel */}
-            <div className="fixed inset-y-0 right-0 w-full sm:w-96 bg-gray-50 shadow-2xl z-50 overflow-y-auto print:hidden">
+            {/* Panel - Even higher z-index */}
+            <div className="fixed inset-y-0 right-0 w-full sm:w-96 bg-gray-50 shadow-2xl z-[70] overflow-y-auto print:hidden">
                 {/* Header */}
                 <div className="sticky top-0 bg-white border-b border-gray-200 p-4 flex items-center justify-between">
                     <h2 className="text-xl font-bold text-gray-800">Reordenar Músicas</h2>
