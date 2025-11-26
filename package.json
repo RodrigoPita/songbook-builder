@@ -12,7 +12,9 @@
     "predeploy": "npm run build",
     "deploy": "gh-pages -d dist",
     "migrate": "node ./scripts/migrateToFirebase.js",
-    "sync": "node ./scripts/syncSongs.js"
+    "sync": "node ./scripts/syncSongs.js",
+    "sync:repertoire": "node ./scripts/syncRepertoire.js",
+    "sync:all": "npm run sync && npm run sync:repertoire"
   },
   "dependencies": {
     "firebase": "^12.4.0",
@@ -20,7 +22,8 @@
     "jspdf": "^3.0.3",
     "lucide-react": "^0.544.0",
     "react": "^19.1.1",
-    "react-dom": "^19.1.1"
+    "react-dom": "^19.1.1",
+    "react-router-dom": "^7.9.6"
   },
   "devDependencies": {
     "@eslint/js": "^9.36.0",

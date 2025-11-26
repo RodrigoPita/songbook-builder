@@ -4,7 +4,11 @@ import { ref, getDownloadURL } from 'firebase/storage';
 import { db, storage } from '../config/firebase';
 import { sortSongsByTitle } from '../utils/sortUtils';
 
-export function useSongbook() {
+/**
+ * Hook for managing songbook data
+ * @param {string} category - 'vozes-de-hipona' or 'repertoire' (defaults to 'vozes-de-hipona')
+ */
+export function useSongbook(category = 'vozes-de-hipona') {
     // State for songs and loading
     const [allSongs, setAllSongs] = useState([]);
     const [songsContent, setSongsContent] = useState({});
@@ -16,14 +20,19 @@ export function useSongbook() {
     const [semitoneShift, setSemitoneShift] = useState({});
     const [searchTerm, setSearchTerm] = useState('');
 
+    // Determine collection and storage path based on category
+    // 'vozes-de-hipona' uses 'songs' collection and 'charts' storage for backward compatibility
+    const collectionName = category === 'repertoire' ? 'repertoire' : 'songs';
+    const storagePath = category === 'repertoire' ? 'repertoire' : 'charts';
+
     // Load metadata from Firestore
     const loadSongsMetadata = useCallback(async () => {
         try {
             setLoading(true);
             setError(null);
 
-            // Query Firestore for all songs (no ordering - we'll sort client-side)
-            const querySnapshot = await getDocs(collection(db, 'songs'));
+            // Query Firestore for all songs from the appropriate collection
+            const querySnapshot = await getDocs(collection(db, collectionName));
 
             // Transform Firestore documents to app format
             const songs = querySnapshot.docs.map(doc => {
@@ -43,16 +52,16 @@ export function useSongbook() {
             // Sort songs client-side, ignoring leading articles
             const sortedSongs = sortSongsByTitle(songs);
 
-            console.log('Songs loaded from Firestore:', sortedSongs.length);
+            console.log(`Songs loaded from ${collectionName}:`, sortedSongs.length);
             setAllSongs(sortedSongs);
 
         } catch (err) {
-            console.error('Error loading songs from Firestore:', err);
+            console.error(`Error loading songs from ${collectionName}:`, err);
             setError(err.message);
         } finally {
             setLoading(false);
         }
-    }, []);
+    }, [collectionName]);
 
     // Load on mount with cleanup
     useEffect(() => {
@@ -103,7 +112,7 @@ export function useSongbook() {
             }
 
             // Fallback: Generate URL from Storage path
-            const fileRef = ref(storage, `charts/${song.filename}`);
+            const fileRef = ref(storage, `${storagePath}/${song.filename}`);
             const url = await getDownloadURL(fileRef);
 
             const response = await fetch(url);
@@ -125,7 +134,7 @@ export function useSongbook() {
             console.error(`Error loading song ${songId}:`, err);
             return null;
         }
-    }, [allSongs, songsContent]);
+    }, [allSongs, songsContent, storagePath]);
 
     // Toggle song selection
     const toggleSongSelection = useCallback(async (songId) => {

@@ -41,7 +41,7 @@ const Sidebar = ({
             >
                 <h2 className="text-xl font-semibold mb-4 text-gray-700 border-b pb-2 flex items-center">
                     <ListOrdered className="w-5 h-5 mr-2" />
-                    Song Index ({songs.length})
+                    Índice ({songs.length})
                 </h2>
 
                 {/* Search Bar */}

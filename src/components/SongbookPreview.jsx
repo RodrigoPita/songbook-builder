@@ -21,7 +21,7 @@ const SongbookPreview = ({
             <div className="flex flex-col sm:flex-row justify-between items-center mb-6 p-4 bg-white sticky top-0 z-10 rounded-xl shadow-lg border border-gray-200 print:hidden">
                 <h2 className="text-xl sm:text-2xl font-extrabold text-gray-800 flex items-center mb-3 sm:mb-0">
                     <FileText className="w-5 h-5 sm:w-6 sm:h-6 mr-2 text-emerald-600" />
-                    Songbook Preview ({songs.length})
+                    Prévia do Songbook ({songs.length})
                 </h2>
                 <button
                     onClick={onExportPdf}
@@ -42,7 +42,8 @@ const SongbookPreview = ({
                 <div className="text-center p-12 bg-gray-50 rounded-xl mt-10">
                     <FileText className="w-12 h-12 mx-auto text-gray-400 mb-4" />
                     <p className="text-lg sm:text-xl text-gray-600 font-medium">
-                        Select songs from the index (click the <ListOrdered className="inline w-5 h-5"/> icon at the top) to build your songbook.
+                        Selecione músicas do índice (clicando no ícone <ListOrdered className="inline w-5 h-5"/> no topo) para criar seu songbook.
+                        <br></br>Pesquise por título, artista ou tag e clique nas músicas desejadas para adicioná-las à prévia do songbook.
                     </p>
                 </div>
             ) : (
