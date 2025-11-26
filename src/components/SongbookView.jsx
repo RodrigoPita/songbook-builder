@@ -3,6 +3,7 @@ import { useSongbook } from '../hooks/useSongbook';
 import Header from './Header';
 import Sidebar from './Sidebar';
 import SongbookPreview from './SongbookPreview';
+import ReorderPanel from './ReorderPanel';
 
 /**
  * Standalone songbook view component.
@@ -10,6 +11,7 @@ import SongbookPreview from './SongbookPreview';
  */
 const SongbookView = ({ category }) => {
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+    const [isReorderPanelOpen, setIsReorderPanelOpen] = useState(false);
 
     const {
         selectedSongs,
@@ -18,6 +20,7 @@ const SongbookView = ({ category }) => {
         setSearchTerm,
         toggleSongSelection,
         handleShiftChange,
+        reorderSongs,
         filteredSongs,
         loading,
         error,
@@ -27,6 +30,11 @@ const SongbookView = ({ category }) => {
     // Handler for removing a song from the preview
     const handleRemoveSong = (songId) => {
         toggleSongSelection(songId);
+    };
+
+    // Handler for reordering songs
+    const handleReorder = (newOrder) => {
+        reorderSongs(newOrder);
     };
 
     // Determine title based on category
@@ -92,9 +100,18 @@ const SongbookView = ({ category }) => {
                     semitoneShift={semitoneShift}
                     onShiftChange={handleShiftChange}
                     onRemoveSong={handleRemoveSong}
+                    onOpenReorder={() => setIsReorderPanelOpen(true)}
                     onExportPdf={() => window.print()}
                 />
             </div>
+
+            {/* Reorder Panel */}
+            <ReorderPanel
+                isOpen={isReorderPanelOpen}
+                onClose={() => setIsReorderPanelOpen(false)}
+                songs={selectedSongs}
+                onReorder={handleReorder}
+            />
         </div>
     );
 };

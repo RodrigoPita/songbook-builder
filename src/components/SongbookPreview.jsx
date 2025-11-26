@@ -1,4 +1,4 @@
-import { FileText, Download, Plus, Minus, ListOrdered, RotateCcw, X } from 'lucide-react';
+import { FileText, Download, Plus, Minus, ListOrdered, RotateCcw, X, ArrowUpDown } from 'lucide-react';
 import SongPreviewBlock from './SongPreviewBlock';
 
 /**
@@ -8,6 +8,7 @@ import SongPreviewBlock from './SongPreviewBlock';
  * @param {object} props.semitoneShift - Object mapping song IDs to semitone shifts.
  * @param {Function} props.onShiftChange - Function to change the semitone shift for a song.
  * @param {Function} props.onRemoveSong - Function to remove a song from the preview.
+ * @param {Function} props.onOpenReorder - Function to open the reorder panel.
  * @param {Function} props.onExportPdf - Function to export the songbook as PDF.
  */
 const SongbookPreview = ({
@@ -15,6 +16,7 @@ const SongbookPreview = ({
     semitoneShift,
     onShiftChange,
     onRemoveSong,
+    onOpenReorder,
     onExportPdf
 }) => {
     return (
@@ -25,18 +27,35 @@ const SongbookPreview = ({
                     <FileText className="w-5 h-5 sm:w-6 sm:h-6 mr-2 text-emerald-600" />
                     Prévia do Songbook ({songs.length})
                 </h2>
-                <button
-                    onClick={onExportPdf}
-                    disabled={songs.length === 0}
-                    className={`flex items-center px-4 sm:px-6 py-2 rounded-full text-sm sm:text-base font-semibold transition duration-300 transform hover:scale-105 shadow-lg
-                        ${songs.length > 0
-                            ? 'bg-emerald-600 text-white hover:bg-emerald-700 active:bg-emerald-800'
-                            : 'bg-gray-400 text-gray-700 cursor-not-allowed'
-                        }`}
-                >
-                    <Download className="w-4 h-4 sm:w-5 sm:h-5 mr-2" />
-                    Export PDF
-                </button>
+                <div className="flex gap-2">
+                    {/* Reorder Button */}
+                    <button
+                        onClick={onOpenReorder}
+                        disabled={songs.length < 2}
+                        className={`flex items-center px-4 py-2 rounded-full text-sm font-semibold transition duration-300 shadow-lg
+                            ${songs.length >= 2
+                                ? 'bg-gray-700 text-white hover:bg-gray-800 active:bg-gray-900'
+                                : 'bg-gray-300 text-gray-500 cursor-not-allowed'
+                            }`}
+                    >
+                        <ArrowUpDown className="w-4 h-4 mr-2" />
+                        Reordenar
+                    </button>
+
+                    {/* Export Button */}
+                    <button
+                        onClick={onExportPdf}
+                        disabled={songs.length === 0}
+                        className={`flex items-center px-4 sm:px-6 py-2 rounded-full text-sm sm:text-base font-semibold transition duration-300 transform hover:scale-105 shadow-lg
+                            ${songs.length > 0
+                                ? 'bg-emerald-600 text-white hover:bg-emerald-700 active:bg-emerald-800'
+                                : 'bg-gray-400 text-gray-700 cursor-not-allowed'
+                            }`}
+                    >
+                        <Download className="w-4 h-4 sm:w-5 sm:h-5 mr-2" />
+                        Exportar PDF
+                    </button>
+                </div>
             </div>
 
             {/* Songbook Content */}
@@ -68,8 +87,8 @@ const SongbookPreview = ({
                                         <Minus className="w-4 h-4" />
                                     </button>
                                     <span className={`px-3 py-1 font-semibold rounded-lg text-sm transition-colors ${(semitoneShift[song.id] || 0) === 0
-                                        ? 'bg-gray-200 text-gray-700'
-                                        : 'bg-emerald-500 text-white'
+                                            ? 'bg-gray-200 text-gray-700'
+                                            : 'bg-emerald-500 text-white'
                                         }`}>
                                         {semitoneShift[song.id] || 0}
                                     </span>
@@ -102,6 +121,7 @@ const SongbookPreview = ({
                                     <X className="w-5 h-5" />
                                 </button>
                             </div>
+
                             <SongPreviewBlock
                                 song={song}
                                 shift={semitoneShift[song.id] || 0}
