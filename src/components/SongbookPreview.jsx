@@ -43,7 +43,7 @@ const SongbookPreview = ({
                     <FileText className="w-12 h-12 mx-auto text-gray-400 mb-4" />
                     <p className="text-lg sm:text-xl text-gray-600 font-medium">
                         Selecione músicas do índice (clicando no ícone <ListOrdered className="inline w-5 h-5"/> no topo) para criar seu songbook.
-                        <br></br>Pesquise por título, artista ou categoria e clique nas músicas desejadas para adicioná-las à prévia do songbook.
+                        <br></br>Pesquise por título, artista ou tag e clique nas músicas desejadas para adicioná-las à prévia do songbook.
                     </p>
                 </div>
             ) : (
