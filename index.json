@@ -1,0 +1,952 @@
+[
+  {
+    "id": "abba",
+    "title": "Abba",
+    "artist": "Laura Souguellis",
+    "filename": "abba.cho",
+    "tags": [
+      "adoração"
+    ]
+  },
+  {
+    "id": "abba_pai",
+    "title": "Abba Pai",
+    "artist": "Colo De Deus",
+    "filename": "abba_pai.cho",
+    "tags": [
+      "adoração"
+    ]
+  },
+  {
+    "id": "abraca_me",
+    "title": "Abraça-me",
+    "artist": "André Valadão",
+    "filename": "abraca_me.cho",
+    "tags": [
+      "adoração"
+    ]
+  },
+  {
+    "id": "acaso_nao_sabeis",
+    "title": "Acaso Não Sabeis",
+    "artist": "Colo De Deus",
+    "filename": "acaso_nao_sabeis.cho",
+    "tags": [
+      "terço",
+      "maria"
+    ]
+  },
+  {
+    "id": "agnus_dei",
+    "title": "Agnus Dei",
+    "artist": "",
+    "filename": "agnus_dei.cho",
+    "tags": [
+      "cordeiro"
+    ]
+  },
+  {
+    "id": "aleluia_minhalma",
+    "title": "Aleluia, Minh’alma Abrirei",
+    "artist": "",
+    "filename": "aleluia_minhalma.cho",
+    "tags": [
+      "aclamação"
+    ]
+  },
+  {
+    "id": "aleluia_quando_estamos_unidos",
+    "title": "Aleluia, Quando Estamos Unidos",
+    "artist": "",
+    "filename": "aleluia_quando_estamos_unidos.cho",
+    "tags": [
+      "aclamação"
+    ]
+  },
+  {
+    "id": "amem_pregao",
+    "title": "Amém",
+    "artist": "Pregão",
+    "filename": "amem_pregao.cho",
+    "tags": []
+  },
+  {
+    "id": "ao_eterno_amor",
+    "title": "Ao Eterno Amor",
+    "artist": "Vida Reluz",
+    "filename": "ao_eterno_amor.cho",
+    "tags": [
+      "adoração"
+    ]
+  },
+  {
+    "id": "ao_ouvir_tua_voz",
+    "title": "Ao Ouvir Tua Voz",
+    "artist": "Shalom",
+    "filename": "ao_ouvir_tua_voz.cho",
+    "tags": [
+      "aclamação"
+    ]
+  },
+  {
+    "id": "aparecida",
+    "title": "Aparecida",
+    "artist": "Colo De Deus",
+    "filename": "aparecida.cho",
+    "tags": [
+      "terço",
+      "maria"
+    ]
+  },
+  {
+    "id": "atos_2",
+    "title": "Atos 2",
+    "artist": "Gabriela Rocha",
+    "filename": "atos_2.cho",
+    "tags": [
+      "adoração",
+      "espírito santo"
+    ]
+  },
+  {
+    "id": "a_barca",
+    "title": "A Barca",
+    "artist": "",
+    "filename": "a_barca.cho",
+    "tags": [
+      "comunhão"
+    ]
+  },
+  {
+    "id": "basta_querer",
+    "title": "Basta Querer",
+    "artist": "Pe. Marcelo Rossi",
+    "filename": "basta_querer.cho",
+    "tags": [
+      "ação de graças"
+    ]
+  },
+  {
+    "id": "basta_uma_palavra",
+    "title": "Basta Uma Palavra",
+    "artist": "Banda Bom Pastor",
+    "filename": "basta_uma_palavra.cho",
+    "tags": [
+      "adoração"
+    ]
+  },
+  {
+    "id": "bonequinha_de_pano",
+    "title": "Bonequinha De Pano",
+    "artist": "Pedro Valença",
+    "filename": "bonequinha_de_pano.cho",
+    "tags": [
+      "intercessão",
+      "cura"
+    ]
+  },
+  {
+    "id": "caminhada",
+    "title": "Caminhada",
+    "artist": "Pe. Jonas Abib",
+    "filename": "caminhada.cho",
+    "tags": [
+      "fé",
+      "perseverança"
+    ]
+  },
+  {
+    "id": "cancao_de_pedro",
+    "title": "Canção De Pedro",
+    "artist": "Bruno Camurati",
+    "filename": "cancao_de_pedro.cho",
+    "tags": [
+      "ação de graças",
+      "missão"
+    ]
+  },
+  {
+    "id": "caneta_e_papel",
+    "title": "Caneta E Papel",
+    "artist": "Os Arrais",
+    "filename": "caneta_e_papel.cho",
+    "tags": [
+      "intercessão",
+      "missão"
+    ]
+  },
+  {
+    "id": "cartas_ao_remetente",
+    "title": "Cartas Ao Remetente",
+    "artist": "Rosa De Saron",
+    "filename": "cartas_ao_remetente.cho",
+    "tags": [
+      "intercessão"
+    ]
+  },
+  {
+    "id": "a_casa_e_sua",
+    "title": "A Casa É Sua",
+    "artist": "Casa Worship",
+    "filename": "a_casa_e_sua.cho",
+    "tags": [
+      "adoração"
+    ]
+  },
+  {
+    "id": "o_ceu_se_abre",
+    "title": "O Céu Se Abre",
+    "artist": "Ministério Adoração E Vida",
+    "filename": "o_ceu_se_abre.cho",
+    "tags": [
+      "adoração",
+      "espírito santo"
+    ]
+  },
+  {
+    "id": "cheia_de_graca",
+    "title": "Cheia De Graça",
+    "artist": "Entrenós",
+    "filename": "cheia_de_graca.cho",
+    "tags": [
+      "terço",
+      "maria"
+    ]
+  },
+  {
+    "id": "cheiro_de_rosas",
+    "title": "Cheiro De Rosas",
+    "artist": "Colo De Deus",
+    "filename": "cheiro_de_rosas.cho",
+    "tags": [
+      "terço",
+      "maria"
+    ]
+  },
+  {
+    "id": "colo_de_mae",
+    "title": "Colo De Mãe",
+    "artist": "Tony Allyson",
+    "filename": "colo_de_mae.cho",
+    "tags": [
+      "terço",
+      "maria"
+    ]
+  },
+  {
+    "id": "como_es_lindo",
+    "title": "Como És Lindo",
+    "artist": "Vida Reluz",
+    "filename": "como_es_lindo.cho",
+    "tags": [
+      "comunhão"
+    ]
+  },
+  {
+    "id": "como_nao_me_apaixonar",
+    "title": "Como Não Me Apaixonar",
+    "artist": "Colo De Deus",
+    "filename": "como_nao_me_apaixonar.cho",
+    "tags": [
+      "adoração"
+    ]
+  },
+  {
+    "id": "como_sao_belos",
+    "title": "Como São Belos",
+    "artist": "Pe. Jonas Abib",
+    "filename": "como_sao_belos.cho",
+    "tags": [
+      "aclamação"
+    ]
+  },
+  {
+    "id": "conheco_um_coracao",
+    "title": "Conheço Um Coração",
+    "artist": "Pe. Zezinho",
+    "filename": "conheco_um_coracao.cho",
+    "tags": [
+      "adoração",
+      "ação de graças"
+    ]
+  },
+  {
+    "id": "coracao_de_mae",
+    "title": "Coração De Mãe",
+    "artist": "Mariani",
+    "filename": "coracao_de_mae.cho",
+    "tags": [
+      "terço",
+      "maria"
+    ]
+  },
+  {
+    "id": "cordeiro_de_deus",
+    "title": "Cordeiro De Deus",
+    "artist": "",
+    "filename": "cordeiro_de_deus.cho",
+    "tags": [
+      "cordeiro"
+    ]
+  },
+  {
+    "id": "cordeiro_de_deus_shalom",
+    "title": "Cordeiro De Deus",
+    "artist": "Shalom",
+    "filename": "cordeiro_de_deus_shalom.cho",
+    "tags": [
+      "cordeiro"
+    ]
+  },
+  {
+    "id": "crucifixo",
+    "title": "Crucifixo",
+    "artist": "Chão E Paz",
+    "filename": "crucifixo.cho",
+    "tags": [
+      "adoração"
+    ]
+  },
+  {
+    "id": "danca_da_amizade",
+    "title": "Dança Da Amizade",
+    "artist": "",
+    "filename": "danca_da_amizade.cho",
+    "tags": [
+      "animação"
+    ]
+  },
+  {
+    "id": "de_deus",
+    "title": "De Deus",
+    "artist": "Daniela Araújo",
+    "filename": "de_deus.cho",
+    "tags": [
+      "adoração"
+    ]
+  },
+  {
+    "id": "declaracao_de_amor",
+    "title": "Declaração De Amor",
+    "artist": "André Bolela",
+    "filename": "declaracao_de_amor.cho",
+    "tags": [
+      "intercessão",
+      "filho",
+      "adoração"
+    ]
+  },
+  {
+    "id": "deixa_a_luz_do_ceu_entrar",
+    "title": "Deixa A Luz Do Céu Entrar",
+    "artist": "",
+    "filename": "deixa_a_luz_do_ceu_entrar.cho",
+    "tags": [
+      "entrada"
+    ]
+  },
+  {
+    "id": "derrama_o_teu_amor_aqui",
+    "title": "Derrama O Teu Amor Aqui",
+    "artist": "Celina Borges",
+    "filename": "derrama_o_teu_amor_aqui.cho",
+    "tags": [
+      "asperção"
+    ]
+  },
+  {
+    "id": "desperta",
+    "title": "Desperta",
+    "artist": "Colo De Deus",
+    "filename": "desperta.cho",
+    "tags": [
+      "adoração"
+    ]
+  },
+  {
+    "id": "deus_de_promessas",
+    "title": "Deus De Promessas",
+    "artist": "Toque No Altar",
+    "filename": "deus_de_promessas.cho",
+    "tags": [
+      "adoração",
+      "ação de graças"
+    ]
+  },
+  {
+    "id": "diante_do_rei",
+    "title": "Diante Do Rei",
+    "artist": "Vida Reluz",
+    "filename": "diante_do_rei.cho",
+    "tags": [
+      "adoração"
+    ]
+  },
+  {
+    "id": "divino_esposo",
+    "title": "Divino Esposo",
+    "artist": "Suely Façanha",
+    "filename": "divino_esposo.cho",
+    "tags": [
+      "adoração",
+      "comunhão"
+    ]
+  },
+  {
+    "id": "doce_mae",
+    "title": "Doce Mãe",
+    "artist": "Shalom",
+    "filename": "doce_mae.cho",
+    "tags": [
+      "terço",
+      "maria"
+    ]
+  },
+  {
+    "id": "as_dores_do_silencio",
+    "title": "As Dores Do Silêncio",
+    "artist": "Rosa De Saron",
+    "filename": "as_dores_do_silencio.cho",
+    "tags": [
+      "adoração"
+    ]
+  },
+  {
+    "id": "a_ele_a_gloria",
+    "title": "A Ele A Glória, Alfa, Omega",
+    "artist": "",
+    "filename": "a_ele_a_gloria.cho",
+    "tags": [
+      "adoração"
+    ]
+  },
+  {
+    "id": "ele_e",
+    "title": "Ele É",
+    "artist": "Os Arrais",
+    "filename": "ele_e.cho",
+    "tags": [
+      "adoração"
+    ]
+  },
+  {
+    "id": "ele_vem",
+    "title": "Ele Vem",
+    "artist": "Gabriel Guedes",
+    "filename": "ele_vem.cho",
+    "tags": [
+      "adoração"
+    ]
+  },
+  {
+    "id": "em_espirito_em_verdade_gratidao",
+    "title": "Em Espírito Em Verdade / Gratidão",
+    "artist": "Meu Prazer/Vida Reluz",
+    "filename": "em_espirito_em_verdade_gratidao.cho",
+    "tags": [
+      "adoração",
+      "espírito santo",
+      "medley"
+    ]
+  },
+  {
+    "id": "em_teus_bracos",
+    "title": "Em Teus Braços",
+    "artist": "Laura Souguellis",
+    "filename": "em_teus_bracos.cho",
+    "tags": [
+      "adoração",
+      "intercessão"
+    ]
+  },
+  {
+    "id": "em_tua_presenca",
+    "title": "Em Tua Presença",
+    "artist": "Walmir Alencar/pe. Fábio De Melo",
+    "filename": "em_tua_presenca.cho",
+    "tags": [
+      "adoração"
+    ]
+  },
+  {
+    "id": "esperanca",
+    "title": "Esperança",
+    "artist": "Os Arrais",
+    "filename": "esperanca.cho",
+    "tags": [
+      "ação de graças",
+      "intercessão"
+    ]
+  },
+  {
+    "id": "espirito_santo",
+    "title": "Espírito Santo",
+    "artist": "Pe. Marcelo Rossi",
+    "filename": "espirito_santo.cho",
+    "tags": [
+      "espírito santo",
+      "adoração"
+    ]
+  },
+  {
+    "id": "estou_aqui",
+    "title": "Estou Aqui",
+    "artist": "Anjos Do Resgate",
+    "filename": "estou_aqui.cho",
+    "tags": [
+      "adoração"
+    ]
+  },
+  {
+    "id": "eu_creio",
+    "title": "Eu Creio",
+    "artist": "Gabriel Guedes",
+    "filename": "eu_creio.cho",
+    "tags": [
+      "adoração",
+      "fé"
+    ]
+  },
+  {
+    "id": "eu_e_voce",
+    "title": "Eu E Você",
+    "artist": "Entrenós",
+    "filename": "eu_e_voce.cho",
+    "tags": [
+      "adoração",
+      "fé",
+      "filho"
+    ]
+  },
+  {
+    "id": "eu_me_rendo",
+    "title": "Eu Me Rendo",
+    "artist": "Gabriel Guedes",
+    "filename": "eu_me_rendo.cho",
+    "tags": [
+      "adoração",
+      "serviço"
+    ]
+  },
+  {
+    "id": "eu_navegarei",
+    "title": "Eu Navegarei",
+    "artist": "Azmaveth Carneiro Da Silva",
+    "filename": "eu_navegarei.cho",
+    "tags": [
+      "adoração",
+      "espírito santo",
+      "pentecostes"
+    ]
+  },
+  {
+    "id": "eu_seguirei",
+    "title": "Eu Seguirei",
+    "artist": "Frei Gilson",
+    "filename": "eu_seguirei.cho",
+    "tags": [
+      "adoração",
+      "missão"
+    ]
+  },
+  {
+    "id": "eu_te_levantarei",
+    "title": "Eu Te Levantarei",
+    "artist": "Frei Gilson",
+    "filename": "eu_te_levantarei.cho",
+    "tags": [
+      "intercessão"
+    ]
+  },
+  {
+    "id": "fiat",
+    "title": "Fiat",
+    "artist": "Em Nome Do Pai",
+    "filename": "fiat.cho",
+    "tags": [
+      "maria",
+      "terço"
+    ]
+  },
+  {
+    "id": "final",
+    "title": "Final",
+    "artist": "Colo De Deus",
+    "filename": "final.cho",
+    "tags": [
+      "intercessão"
+    ]
+  },
+  {
+    "id": "fizeste_nos_senhor_para_vos",
+    "title": "Fizeste-nos, Senhor, Para Vós",
+    "artist": "",
+    "filename": "fizeste_nos_senhor_para_vos.cho",
+    "tags": [
+      "entrada"
+    ]
+  },
+  {
+    "id": "foi_por_você",
+    "title": "Foi Por Você",
+    "artist": "Anjos Do Resgate",
+    "filename": "foi_por_você.cho",
+    "tags": [
+      "adoração",
+      "jesus"
+    ]
+  },
+  {
+    "id": "forca_e_vitoria",
+    "title": "Força E Vitória",
+    "artist": "Pe. Marcelo Rossi",
+    "filename": "forca_e_vitoria.cho",
+    "tags": [
+      "ação de graças",
+      "adoração"
+    ]
+  },
+  {
+    "id": "galatas_5_1",
+    "title": "Gálatas 5,1",
+    "artist": "Diego Fernandes",
+    "filename": "galatas_5_1.cho",
+    "tags": [
+      "animação"
+    ]
+  },
+  {
+    "id": "getsemani_colo",
+    "title": "Getsêmani",
+    "artist": "Colo De Deus",
+    "filename": "getsemani_colo.cho",
+    "tags": [
+      "intercessão"
+    ]
+  },
+  {
+    "id": "getsemani_leo",
+    "title": "Getsêmani",
+    "artist": "Leonardo Gonçalves",
+    "filename": "getsemani_leo.cho",
+    "tags": [
+      "intercessão",
+      "terço"
+    ]
+  },
+  {
+    "id": "gloria_a_deus_nas_alturas_davi",
+    "title": "Glória A Deus Nas Alturas",
+    "artist": "Viviane Meyer/Uriel Fonseca/DAVI",
+    "filename": "gloria_a_deus_nas_alturas_davi.cho",
+    "tags": [
+      "glória"
+    ]
+  },
+  {
+    "id": "gloria_ao_pai_criador",
+    "title": "Glória Ao Pai O Criador",
+    "artist": "Glória Da Cel",
+    "filename": "gloria_ao_pai_criador.cho",
+    "tags": [
+      "glória"
+    ]
+  },
+  {
+    "id": "gloria_in_excelsis_deo",
+    "title": "Gloria In Excelsis Deo",
+    "artist": "",
+    "filename": "gloria_in_excelsis_deo.cho",
+    "tags": [
+      "gloria"
+    ]
+  },
+  {
+    "id": "hallelujah",
+    "title": "Hallelujah",
+    "artist": "Israela Claro",
+    "filename": "hallelujah.cho",
+    "tags": [
+      "aclamação"
+    ]
+  },
+  {
+    "id": "imenso_amor",
+    "title": "Imenso Amor",
+    "artist": "Shalom",
+    "filename": "imenso_amor.cho",
+    "tags": [
+      "ato penitencial"
+    ]
+  },
+  {
+    "id": "incendeia_minha_alma",
+    "title": "Incendeia Minha Alma",
+    "artist": "Flavinho",
+    "filename": "incendeia_minha_alma.cho",
+    "tags": [
+      "espírito santo"
+    ]
+  },
+  {
+    "id": "invocamos",
+    "title": "Invocamos",
+    "artist": "Eros Biondini",
+    "filename": "invocamos.cho",
+    "tags": [
+      "espírito santo"
+    ]
+  },
+  {
+    "id": "jardim",
+    "title": "Jardim",
+    "artist": "Fraternidade São João Paulo II",
+    "filename": "jardim.cho",
+    "tags": [
+      "adoração"
+    ]
+  },
+  {
+    "id": "jesus_em_tua_presenca",
+    "title": "Jesus Em Tua Presença",
+    "artist": "Asaph Borba",
+    "filename": "jesus_em_tua_presenca.cho",
+    "tags": [
+      "adoração",
+      "jesus"
+    ]
+  },
+  {
+    "id": "kyrie_eleison_jmj",
+    "title": "Kyrie Eleison",
+    "artist": "JMJ",
+    "filename": "kyrie_eleison_jmj.cho",
+    "tags": [
+      "ato penitencial"
+    ]
+  },
+  {
+    "id": "kyrie_eleison_shalom",
+    "title": "Kyrie Eleison",
+    "artist": "Shalom",
+    "filename": "kyrie_eleison_shalom.cho",
+    "tags": [
+      "ato penitencial"
+    ]
+  },
+  {
+    "id": "lazaro",
+    "title": "Lázaro",
+    "artist": "",
+    "filename": "lazaro.cho",
+    "tags": [
+      "animação"
+    ]
+  },
+  {
+    "id": "levanta_a_mao_e_reza",
+    "title": "Levanta A Mão E Reza",
+    "artist": "",
+    "filename": "levanta_a_mao_e_reza.cho",
+    "tags": [
+      "animação"
+    ]
+  },
+  {
+    "id": "liberta_me_de_mim",
+    "title": "Liberta-me De Mim",
+    "artist": "Luma Elpídio",
+    "filename": "liberta_me_de_mim.cho",
+    "tags": []
+  },
+  {
+    "id": "lindo_es_so_quero_ver_voce_para_que_entre_o_rei",
+    "title": "Lindo És/Só Quero Ver Você/Para Que Entre O Rei",
+    "artist": "",
+    "filename": "lindo_es_so_quero_ver_voce_para_que_entre_o_rei.cho",
+    "tags": [
+      "adoração",
+      "medley"
+    ]
+  },
+  {
+    "id": "livre",
+    "title": "Livre",
+    "artist": "Em Nome Do Pai",
+    "filename": "livre.cho",
+    "tags": [
+      "adoração",
+      "ação de graças"
+    ]
+  },
+  {
+    "id": "lugar_secreto",
+    "title": "Lugar Secreto",
+    "artist": "Gabriela Rocha",
+    "filename": "lugar_secreto.cho",
+    "tags": [
+      "adoração",
+      "intercessão"
+    ]
+  },
+  {
+    "id": "mae_voce_pensou",
+    "title": "Mãe Você Pensou",
+    "artist": "",
+    "filename": "mae_voce_pensou.cho",
+    "tags": [
+      "maria",
+      "terço"
+    ]
+  },
+  {
+    "id": "magnificat",
+    "title": "Magnificat",
+    "artist": "",
+    "filename": "magnificat.cho",
+    "tags": [
+      "maria",
+      "terço"
+    ]
+  },
+  {
+    "id": "mais",
+    "title": "Mais",
+    "artist": "Os Arrais",
+    "filename": "mais.cho",
+    "tags": []
+  },
+  {
+    "id": "mais_perto_eu_quero_estar",
+    "title": "Mais Perto Quero Estar",
+    "artist": "Harpa Cristã",
+    "filename": "mais_perto_eu_quero_estar.cho",
+    "tags": [
+      "adoração"
+    ]
+  },
+  {
+    "id": "meu_coracao_e_para_ti",
+    "title": "Meu Coração É Para Ti",
+    "artist": "",
+    "filename": "meu_coracao_e_para_ti.cho",
+    "tags": [
+      "ofertório"
+    ]
+  },
+  {
+    "id": "milagres",
+    "title": "Milagres",
+    "artist": "Juliano Son",
+    "filename": "milagres.cho",
+    "tags": [
+      "adoração",
+      "intercessão"
+    ]
+  },
+  {
+    "id": "minha_essencia",
+    "title": "Minha Essência",
+    "artist": "Thiago Brado",
+    "filename": "minha_essencia.cho",
+    "tags": [
+      "adoração"
+    ]
+  },
+  {
+    "id": "missao",
+    "title": "Missão",
+    "artist": "Toni Garrido",
+    "filename": "missao.cho",
+    "tags": [
+      "adoração",
+      "intercessão"
+    ]
+  },
+  {
+    "id": "nada_nos_separara",
+    "title": "Nada Nos Separará",
+    "artist": "Davidson Silva",
+    "filename": "nada_nos_separara.cho",
+    "tags": [
+      "adoração"
+    ]
+  },
+  {
+    "id": "ninguem_explica_deus",
+    "title": "Ninguém Explica Deus",
+    "artist": "Preto No Branco",
+    "filename": "ninguem_explica_deus.cho",
+    "tags": [
+      "adoração"
+    ]
+  },
+  {
+    "id": "no_silencio",
+    "title": "No Silêncio",
+    "artist": "Ministério Zoe",
+    "filename": "no_silencio.cho",
+    "tags": [
+      "adoração",
+      "intercessão"
+    ]
+  },
+  {
+    "id": "noites_traicoeiras",
+    "title": "Noites Traiçoeiras",
+    "artist": "",
+    "filename": "noites_traicoeiras.cho",
+    "tags": [
+      "adoração",
+      "ação de graças",
+      "intercessão"
+    ]
+  },
+  {
+    "id": "oceanos",
+    "title": "Oceanos",
+    "artist": "Gabriel Guedes",
+    "filename": "oceanos.cho",
+    "tags": [
+      "adoração",
+      "intercessão"
+    ]
+  },
+  {
+    "id": "olhando_tua_paixao",
+    "title": "Olhando Tua Paixão",
+    "artist": "Juninho Cassimiro",
+    "filename": "olhando_tua_paixao.cho",
+    "tags": [
+      "adoração",
+      "ação de graças"
+    ]
+  },
+  {
+    "id": "ora_que_melhora",
+    "title": "Ora Que Melhora",
+    "artist": "",
+    "filename": "ora_que_melhora.cho",
+    "tags": [
+      "animação"
+    ]
+  },
+  {
+    "id": "sacramento_da_comunhao",
+    "title": "Sacramento Da Comunhão",
+    "artist": "",
+    "filename": "sacramento_da_comunhao.cho",
+    "tags": [
+      "comunhão"
+    ]
+  },
+  {
+    "id": "a_ti_meu_deus",
+    "title": "A Ti Meu Deus",
+    "artist": "",
+    "filename": "a_ti_meu_deus.cho",
+    "tags": [
+      "ofertório"
+    ]
+  }
+]
