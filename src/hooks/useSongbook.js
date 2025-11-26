@@ -157,6 +157,13 @@ export function useSongbook(category = 'vozes-de-hipona') {
         setSemitoneShift(prev => ({ ...prev, [songId]: newShift }));
     }, []);
 
+    // Reorder songs
+    const reorderSongs = useCallback((newOrder) => {
+        // Extract just the IDs in the new order
+        const newIds = newOrder.map(song => song.id);
+        setSelectedSongIds(newIds);
+    }, []);
+
     // Songs filtered by search (includes tags!)
     const filteredSongs = useMemo(() => {
         if (!searchTerm.trim()) return allSongs;
@@ -207,6 +214,7 @@ export function useSongbook(category = 'vozes-de-hipona') {
         filteredSongs,
         toggleSongSelection,
         handleShiftChange,
+        reorderSongs,
         loading,
         error,
         reloadSongs: loadSongsMetadata
