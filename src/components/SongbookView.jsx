@@ -24,6 +24,11 @@ const SongbookView = ({ category }) => {
         reloadSongs
     } = useSongbook(category);
 
+    // Handler for removing a song from the preview
+    const handleRemoveSong = (songId) => {
+        toggleSongSelection(songId);
+    };
+
     // Determine title based on category
     const pageTitle = category === 'repertoire' ? 'Repertoire' : 'Vozes de Hipona';
 
@@ -86,6 +91,7 @@ const SongbookView = ({ category }) => {
                     songs={selectedSongs}
                     semitoneShift={semitoneShift}
                     onShiftChange={handleShiftChange}
+                    onRemoveSong={handleRemoveSong}
                     onExportPdf={() => window.print()}
                 />
             </div>
