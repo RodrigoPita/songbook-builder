@@ -4,16 +4,37 @@ import react from '@vitejs/plugin-react'
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [react()],
-  base: '/songbook-builder/', // IMPORTANTE: Nome do seu repositório GitHub
-  publicDir: 'public', // Pasta onde estão os arquivos .cho e index.json
+  base: '/songbook-builder/',
+  publicDir: 'public',
   build: {
     outDir: 'dist',
     assetsDir: 'assets',
-    // Copia todos os arquivos de public/ para dist/
-    copyPublicDir: true
+    copyPublicDir: true,
+
+    // Increase chunk size warning limit to 1000 kB
+    chunkSizeWarningLimit: 1000,
+
+    rollupOptions: {
+      output: {
+        // Manual chunking strategy
+        manualChunks: {
+          // Vendor chunk: React and related libraries
+          'react-vendor': ['react', 'react-dom'],
+
+          // Firebase chunk: All Firebase services
+          'firebase-vendor': [
+            'firebase/app',
+            'firebase/firestore',
+            'firebase/storage'
+          ],
+
+          // Icons chunk: Lucide React icons
+          'icons-vendor': ['lucide-react']
+        }
+      }
+    }
   },
   server: {
-    // Para desenvolvimento local
     port: 5173,
     proxy: {
       '/storage': {
