@@ -2,8 +2,12 @@ import { Music, ListOrdered, X } from 'lucide-react';
 
 /**
  * Renders the main application header with sidebar toggle.
+ * @param {object} props
+ * @param {boolean} props.isSidebarOpen - Whether sidebar is open
+ * @param {Function} props.onToggleSidebar - Toggle sidebar function
+ * @param {string} props.title - Page title (optional)
  */
-const Header = ({ isSidebarOpen, onToggleSidebar }) => {
+const Header = ({ isSidebarOpen, onToggleSidebar, title = 'Songbook Creator' }) => {
     return (
         <header className="bg-white shadow-md p-4 print:hidden flex justify-between items-center sticky top-0 z-20">
             <div className="flex items-center">
@@ -17,7 +21,7 @@ const Header = ({ isSidebarOpen, onToggleSidebar }) => {
 
                 <h1 className="text-xl sm:text-2xl font-bold text-emerald-700">
                     <Music className="inline-block w-5 h-5 sm:w-6 sm:h-6 mr-2" />
-                    Songbook Creator
+                    {title}
                 </h1>
             </div>
         </header>
