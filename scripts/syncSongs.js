@@ -34,6 +34,36 @@ initializeApp({
 const db = getFirestore();
 const bucket = getStorage().bucket();
 
+// ========================================
+// SORTING UTILITIES
+// ========================================
+
+/**
+ * Removes leading articles from a title for proper alphabetical sorting
+ * Handles Portuguese articles: "A", "O", "Os", "As", "Um", "Uma"
+ * Handles English articles: "A", "An", "The"
+ */
+function stripArticles(title) {
+  if (!title || typeof title !== 'string') return '';
+
+  const articles = /^(A|O|Os|As|Um|Uma|An|The)\s+/i;
+  return title.replace(articles, '').trim();
+}
+
+/**
+ * Compares two song titles for sorting, ignoring leading articles
+ */
+function compareTitles(titleA, titleB) {
+  const a = stripArticles(titleA).toLowerCase();
+  const b = stripArticles(titleB).toLowerCase();
+
+  return a.localeCompare(b, 'pt-BR', { sensitivity: 'base' });
+}
+
+// ========================================
+// METADATA EXTRACTION
+// ========================================
+
 // Extract metadata from ChordPro content
 function extractMetadata(content, filename) {
   const titleMatch = content.match(/\{title:\s*([^}]+)\}/i);
@@ -215,7 +245,7 @@ async function syncSongs() {
     console.log('\n📝 Step 3: Generating index.json from Firestore...\n');
 
     // Get ALL songs from Firestore (source of truth)
-    const allSongsSnapshot = await db.collection('songs').orderBy('title', 'asc').get();
+    const allSongsSnapshot = await db.collection('songs').get();
     const finalIndexData = allSongsSnapshot.docs.map(doc => {
       const data = doc.data();
       return {
@@ -227,7 +257,11 @@ async function syncSongs() {
       };
     });
 
+    // Sort by title, ignoring leading articles
+    finalIndexData.sort((a, b) => compareTitles(a.title, b.title));
+
     console.log(`📊 Retrieved ${finalIndexData.length} songs from Firestore`);
+    console.log(`🔤 Sorted alphabetically (ignoring articles: A, O, Os, The, etc.)`);
 
     // Write local index.json
     if (fs.existsSync(path.dirname(indexPath))) {
@@ -268,6 +302,7 @@ async function syncSongs() {
     console.log(`📤 Local → Firebase: ${uploadedCount} files`);
     console.log(`📥 Storage → Firestore: ${missingInFirestore.length} files`);
     console.log(`📊 Total in Firestore: ${finalIndexData.length} songs`);
+    console.log(`🔤 Sorting: Ignoring articles (A, O, Os, The, etc.)`);
     console.log(`${'='.repeat(50)}\n`);
 
   } catch (err) {
