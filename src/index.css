@@ -28,4 +28,31 @@
         -webkit-print-color-adjust: exact !important;
         print-color-adjust: exact !important;
     }
+
+    /* Fix iOS Safari scaling issues */
+    @page {
+        size: A4;
+        margin: 1cm;
+    }
+
+    body {
+        width: 100%;
+        margin: 0;
+        padding: 0;
+        font-size: 12pt;
+        /* Force consistent base font size */
+    }
+
+    /* Prevent iOS from shrinking content */
+    html {
+        -webkit-text-size-adjust: 100%;
+        text-size-adjust: 100%;
+    }
+
+    /* Ensure content fills the page properly */
+    #root,
+    #root>div {
+        width: 100% !important;
+        max-width: none !important;
+    }
 }
