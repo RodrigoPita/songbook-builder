@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useSongbook } from '../hooks/useSongbook';
 import Header from './Header';
 import Sidebar from './Sidebar';
@@ -39,6 +39,16 @@ const SongbookView = ({ category }) => {
 
     // Determine title based on category
     const pageTitle = category === 'repertoire' ? 'Repertoire' : 'Vozes de Hipona';
+
+    // Update document title for browser tab and print headers
+    useEffect(() => {
+        document.title = pageTitle;
+
+        // Reset to default on unmount
+        return () => {
+            document.title = 'Songbook Creator';
+        };
+    }, [pageTitle]);
 
     // Loading state
     if (loading) {
