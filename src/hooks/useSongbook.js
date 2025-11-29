@@ -3,6 +3,7 @@ import { collection, getDocs } from 'firebase/firestore';
 import { ref, getDownloadURL } from 'firebase/storage';
 import { db, storage } from '../config/firebase';
 import { sortSongsByTitle } from '../utils/sortUtils';
+import { normalizeText } from '../utils/textUtils';
 
 /**
  * Hook for managing songbook data
@@ -162,23 +163,24 @@ export function useSongbook(category = 'vozes-de-hipona') {
         // Extract just the IDs in the new order
         const newIds = newOrder.map(song => song.id);
         setSelectedSongIds(newIds);
-    }, []);
+    }, [selectedSongIds]);
 
-    // Songs filtered by search (includes tags!)
+    // Songs filtered by search (includes tags!) - now accent-insensitive
     const filteredSongs = useMemo(() => {
         if (!searchTerm.trim()) return allSongs;
 
-        const term = searchTerm.toLowerCase();
+        const normalizedTerm = normalizeText(searchTerm);
+
         return allSongs.filter(song => {
-            // Search in title
-            if (song.title.toLowerCase().includes(term)) return true;
+            // Search in title (accent-insensitive)
+            if (normalizeText(song.title).includes(normalizedTerm)) return true;
 
-            // Search in artist
-            if (song.artist && song.artist.toLowerCase().includes(term)) return true;
+            // Search in artist (accent-insensitive)
+            if (song.artist && normalizeText(song.artist).includes(normalizedTerm)) return true;
 
-            // Search in tags
+            // Search in tags (accent-insensitive)
             if (song.tags && Array.isArray(song.tags)) {
-                if (song.tags.some(tag => tag.toLowerCase().includes(term))) return true;
+                if (song.tags.some(tag => normalizeText(tag).includes(normalizedTerm))) return true;
             }
 
             return false;
