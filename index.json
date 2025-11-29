@@ -932,6 +932,93 @@
     ]
   },
   {
+    "id": "oracao_de_sao_francisco",
+    "title": "Oração De São Francisco",
+    "artist": "",
+    "filename": "oracao_de_sao_francisco.cho",
+    "tags": [
+      "ação de graças",
+      "intercessão"
+    ]
+  },
+  {
+    "id": "ousado_amor",
+    "title": "Ousado Amor",
+    "artist": "Isaías Saad",
+    "filename": "ousado_amor.cho",
+    "tags": [
+      "adoração"
+    ]
+  },
+  {
+    "id": "pao_e_vinho",
+    "title": "Pão E Vinho",
+    "artist": "",
+    "filename": "pao_e_vinho.cho",
+    "tags": [
+      "ofertório"
+    ]
+  },
+  {
+    "id": "pelos_prados",
+    "title": "Pelos Prados",
+    "artist": "Salmo 22",
+    "filename": "pelos_prados.cho",
+    "tags": [
+      "comunhão"
+    ]
+  },
+  {
+    "id": "perdao_e_graca",
+    "title": "Perdão E Graça",
+    "artist": "Vineyard Brasil",
+    "filename": "perdao_e_graca.cho",
+    "tags": [
+      "ato penitencial"
+    ]
+  },
+  {
+    "id": "o_poco",
+    "title": "O Poço",
+    "artist": "Juninho Cassimiro",
+    "filename": "o_poco.cho",
+    "tags": [
+      "adoração",
+      "ação de graças"
+    ]
+  },
+  {
+    "id": "poderoso_deus",
+    "title": "Poderoso Deus",
+    "artist": "Tony Allyson",
+    "filename": "poderoso_deus.cho",
+    "tags": [
+      "adoração"
+    ]
+  },
+  {
+    "id": "pra_sempre_porque_ele_vive",
+    "title": "Pra Sempre/porque Ele Vive",
+    "artist": "Gabriel Guedes",
+    "filename": "pra_sempre_porque_ele_vive.cho",
+    "tags": [
+      "adoração",
+      "medley"
+    ]
+  },
+  {
+    "id": "prece_ao_espirito_de_deus",
+    "title": "Prece Ao Espírito De Deus",
+    "artist": "Colo De Deus",
+    "filename": "prece_ao_espirito_de_deus.cho",
+    "tags": [
+      "entrada",
+      "final",
+      "animação",
+      "espírito santo"
+    ]
+  },
+  {
     "id": "sacramento_da_comunhao",
     "title": "Sacramento Da Comunhão",
     "artist": "",
