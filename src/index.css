@@ -29,30 +29,60 @@
         print-color-adjust: exact !important;
     }
 
-    /* Fix iOS Safari scaling issues */
-    @page {
-        size: A4;
-        margin: 1cm;
-    }
+}
 
-    body {
-        width: 100%;
-        margin: 0;
-        padding: 0;
-        font-size: 12pt;
-        /* Force consistent base font size */
-    }
+/* iOS-SPECIFIC print fixes - only applies on iOS devices */
+@supports (-webkit-touch-callout: none) {
+    @media print {
+        body {
+            font-size: 13pt !important;
+        }
 
-    /* Prevent iOS from shrinking content */
-    html {
-        -webkit-text-size-adjust: 100%;
-        text-size-adjust: 100%;
-    }
+        /* Prevent iOS from shrinking content */
+        html {
+            -webkit-text-size-adjust: none !important;
+            text-size-adjust: none !important;
+        }
 
-    /* Ensure content fills the page properly */
-    #root,
-    #root>div {
-        width: 100% !important;
-        max-width: none !important;
+        /* Override inline styles on pre tags */
+        pre {
+            margin: 0 !important;
+            padding: 0 !important;
+            line-height: 1.1 !important;
+            min-height: 0 !important;
+            height: auto !important;
+            font-size: 12pt !important;
+        }
+
+        /* Chord lines - super tight */
+        .chord-line,
+        pre.chord-line {
+            margin: 0 !important;
+            padding: 0 !important;
+            line-height: 1 !important;
+            min-height: 0 !important;
+            font-size: 11pt !important;
+        }
+
+        /* Remove ALL spacing from chord/lyric containers */
+        div.whitespace-pre-wrap,
+        div[class*="whitespace"] {
+            margin: 0 !important;
+            padding: 0 !important;
+            line-height: 1.1 !important;
+        }
+
+        /* Paragraph and div spacing */
+        p,
+        div {
+            margin: 0 !important;
+            padding: 0 !important;
+            line-height: 1.3 !important;
+        }
+
+        /* Empty divs used for spacing */
+        .h-4 {
+            height: 0.5rem !important;
+        }
     }
 }
