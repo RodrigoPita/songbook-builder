@@ -439,6 +439,16 @@
     ]
   },
   {
+    "id": "em_espirito_em_verdade",
+    "title": "Em Espírito Em Verdade",
+    "artist": "Márcio Pereira",
+    "filename": "em_espirito_em_verdade.cho",
+    "tags": [
+      "adoração",
+      "espírito santo"
+    ]
+  },
+  {
     "id": "em_espirito_em_verdade_gratidao",
     "title": "Em Espírito Em Verdade / Gratidão",
     "artist": "Meu Prazer/Vida Reluz",
@@ -447,6 +457,15 @@
       "adoração",
       "espírito santo",
       "medley"
+    ]
+  },
+  {
+    "id": "em_teu_altar",
+    "title": "Em Teu Altar",
+    "artist": "Walmir Alencar",
+    "filename": "em_teu_altar.cho",
+    "tags": [
+      "ofertório"
     ]
   },
   {
@@ -495,6 +514,15 @@
     "filename": "estou_aqui.cho",
     "tags": [
       "adoração"
+    ]
+  },
+  {
+    "id": "eu_celebrarei",
+    "title": "Eu Celebrarei",
+    "artist": "Pe. Zeca",
+    "filename": "eu_celebrarei.cho",
+    "tags": [
+      "santo"
     ]
   },
   {
@@ -761,7 +789,7 @@
   },
   {
     "id": "lindo_es_so_quero_ver_voce_para_que_entre_o_rei",
-    "title": "Lindo És/Só Quero Ver Você/Para Que Entre O Rei",
+    "title": "Lindo És / Só Quero Ver Você / Para Que Entre O Rei",
     "artist": "",
     "filename": "lindo_es_so_quero_ver_voce_para_que_entre_o_rei.cho",
     "tags": [
@@ -787,6 +815,15 @@
     "tags": [
       "adoração",
       "intercessão"
+    ]
+  },
+  {
+    "id": "luz_do_mundo",
+    "title": "Luz Do Mundo",
+    "artist": "Em Nome Do Pai",
+    "filename": "luz_do_mundo.cho",
+    "tags": [
+      "entrada"
     ]
   },
   {
@@ -886,6 +923,16 @@
     "title": "No Silêncio",
     "artist": "Ministério Zoe",
     "filename": "no_silencio.cho",
+    "tags": [
+      "adoração",
+      "intercessão"
+    ]
+  },
+  {
+    "id": "a_noite_chega",
+    "title": "A Noite Chega",
+    "artist": "Entrenós",
+    "filename": "a_noite_chega.cho",
     "tags": [
       "adoração",
       "intercessão"
@@ -998,7 +1045,7 @@
   },
   {
     "id": "pra_sempre_porque_ele_vive",
-    "title": "Pra Sempre/porque Ele Vive",
+    "title": "Pra Sempre / Porque Ele Vive",
     "artist": "Gabriel Guedes",
     "filename": "pra_sempre_porque_ele_vive.cho",
     "tags": [
@@ -1019,12 +1066,325 @@
     ]
   },
   {
+    "id": "principio_e_fim",
+    "title": "Princípio E Fim",
+    "artist": "Leonardo Gonçalves",
+    "filename": "principio_e_fim.cho",
+    "tags": [
+      "adoração",
+      "intercessão"
+    ]
+  },
+  {
+    "id": "quanto_teu_pai_revelou",
+    "title": "Quando Teu Pai Revelou",
+    "artist": "Waldeci Farias",
+    "filename": "quanto_teu_pai_revelou.cho",
+    "tags": [
+      "maria"
+    ]
+  },
+  {
+    "id": "que_amor_e_esse",
+    "title": "Que Amor É Esse",
+    "artist": "Luma Elpídio",
+    "filename": "que_amor_e_esse.cho",
+    "tags": [
+      "intercessão"
+    ]
+  },
+  {
+    "id": "que_eu_me_conheca_a_mim_mesmo",
+    "title": "Que Eu Me Conheça A Mim Mesmo",
+    "artist": "",
+    "filename": "que_eu_me_conheca_a_mim_mesmo.cho",
+    "tags": [
+      "ato penitencial"
+    ]
+  },
+  {
+    "id": "o_que_tua_gloria_fez_comigo",
+    "title": "O Que Tua Glória Fez Comigo",
+    "artist": "Hélio Borges",
+    "filename": "o_que_tua_gloria_fez_comigo.cho",
+    "tags": [
+      "adoração",
+      "intercessão",
+      "ação de graças"
+    ]
+  },
+  {
+    "id": "quebro_meu_vaso",
+    "title": "Quebro Meu Vaso",
+    "artist": "Luma Elpídio",
+    "filename": "quebro_meu_vaso.cho",
+    "tags": [
+      "adoração",
+      "ato penitencial"
+    ]
+  },
+  {
+    "id": "queima_de_novo",
+    "title": "Queima De Novo",
+    "artist": "Colo De Deus",
+    "filename": "queima_de_novo.cho",
+    "tags": [
+      "adoração",
+      "espírito santo"
+    ]
+  },
+  {
+    "id": "quero_conhecer_jesus",
+    "title": "Quero Conhecer Jesus",
+    "artist": "Alessandro Vilas Boas",
+    "filename": "quero_conhecer_jesus.cho",
+    "tags": [
+      "adoração"
+    ]
+  },
+  {
+    "id": "quero_conhecer_jesus_a_casa_e_sua",
+    "title": "Quero Conhecer Jesus / A Casa É Sua",
+    "artist": "",
+    "filename": "quero_conhecer_jesus_a_casa_e_sua.cho",
+    "tags": [
+      "adoração",
+      "intercessão",
+      "medley"
+    ]
+  },
+  {
+    "id": "quero_mergulhar_nas_profundezas",
+    "title": "Quero Mergulhar Nas Profundezas",
+    "artist": "",
+    "filename": "quero_mergulhar_nas_profundezas.cho",
+    "tags": [
+      "espírito santo",
+      "adoração"
+    ]
+  },
+  {
+    "id": "raridade",
+    "title": "Raridade",
+    "artist": "Anderson Freire",
+    "filename": "raridade.cho",
+    "tags": [
+      "intercessão"
+    ]
+  },
+  {
+    "id": "regaco_acolhedor",
+    "title": "Regaço Acolhedor",
+    "artist": "Kelly Patrícia",
+    "filename": "regaco_acolhedor.cho",
+    "tags": [
+      "maria"
+    ]
+  },
+  {
+    "id": "reina",
+    "title": "Reina",
+    "artist": "",
+    "filename": "reina.cho",
+    "tags": [
+      "adoração"
+    ]
+  },
+  {
+    "id": "renova_me",
+    "title": "Renova-me",
+    "artist": "Vida Reluz",
+    "filename": "renova_me.cho",
+    "tags": [
+      "ato penitencial"
+    ]
+  },
+  {
+    "id": "restaura_nossa_casa",
+    "title": "Restaura Nossa Casa",
+    "artist": "Salette Ferreira",
+    "filename": "restaura_nossa_casa.cho",
+    "tags": []
+  },
+  {
+    "id": "romanos_5",
+    "title": "Romanos 5",
+    "artist": "Colo De Deus",
+    "filename": "romanos_5.cho",
+    "tags": []
+  },
+  {
+    "id": "ruah",
+    "title": "Ruah",
+    "artist": "Shalom",
+    "filename": "ruah.cho",
+    "tags": [
+      "espírito santo"
+    ]
+  },
+  {
     "id": "sacramento_da_comunhao",
     "title": "Sacramento Da Comunhão",
     "artist": "",
     "filename": "sacramento_da_comunhao.cho",
     "tags": [
       "comunhão"
+    ]
+  },
+  {
+    "id": "sanctus",
+    "title": "Sanctus",
+    "artist": "",
+    "filename": "sanctus.cho",
+    "tags": [
+      "santo"
+    ]
+  },
+  {
+    "id": "santo_jmj",
+    "title": "Santo",
+    "artist": "JMJ",
+    "filename": "santo_jmj.cho",
+    "tags": [
+      "santo"
+    ]
+  },
+  {
+    "id": "santo_dos_anjos",
+    "title": "Santo Dos Anjos",
+    "artist": "Pe. Marcelo Rossi",
+    "filename": "santo_dos_anjos.cho",
+    "tags": [
+      "santo"
+    ]
+  },
+  {
+    "id": "santo_e_o_senhor_deus_poderoso",
+    "title": "Santo É O Senhor, Deus Poderoso",
+    "artist": "",
+    "filename": "santo_e_o_senhor_deus_poderoso.cho",
+    "tags": [
+      "santo"
+    ]
+  },
+  {
+    "id": "santo_espirito",
+    "title": "Santo Espírito",
+    "artist": "Laura Souguellis",
+    "filename": "santo_espirito.cho",
+    "tags": [
+      "santo"
+    ]
+  },
+  {
+    "id": "santo_deus_do_universo",
+    "title": "Santo, Deus Do Universo",
+    "artist": "",
+    "filename": "santo_deus_do_universo.cho",
+    "tags": [
+      "santo"
+    ]
+  },
+  {
+    "id": "santo_santo_e",
+    "title": "Santo, Santo É",
+    "artist": "",
+    "filename": "santo_santo_e.cho",
+    "tags": [
+      "santo"
+    ]
+  },
+  {
+    "id": "se_ninguem_te_adorar_eu_vou",
+    "title": "Se Ninguém Te Adorar Eu Vou",
+    "artist": "Colo De Deus",
+    "filename": "se_ninguem_te_adorar_eu_vou.cho",
+    "tags": [
+      "adoração"
+    ]
+  },
+  {
+    "id": "se_o_teu_sangue",
+    "title": "Se O Teu Sangue",
+    "artist": "Gil Monteiro",
+    "filename": "se_o_teu_sangue.cho",
+    "tags": [
+      "adoração",
+      "intercessão"
+    ]
+  },
+  {
+    "id": "senhor_que_viestes_salvar",
+    "title": "Senhor Que Viestes Salvar",
+    "artist": "Pe. José Candido",
+    "filename": "senhor_que_viestes_salvar.cho",
+    "tags": [
+      "ato penitencial"
+    ]
+  },
+  {
+    "id": "seu_amor_e_demais",
+    "title": "Seu Amor É Demais",
+    "artist": "Banda Dom",
+    "filename": "seu_amor_e_demais.cho",
+    "tags": [
+      "adoração",
+      "intercessão"
+    ]
+  },
+  {
+    "id": "so",
+    "title": "Só",
+    "artist": "Colo De Deus",
+    "filename": "so.cho",
+    "tags": [
+      "intercessão"
+    ]
+  },
+  {
+    "id": "so_em_ti_viver",
+    "title": "Só Em Ti Viver",
+    "artist": "",
+    "filename": "so_em_ti_viver.cho",
+    "tags": [
+      "ofertório"
+    ]
+  },
+  {
+    "id": "so_por_ti_jesus",
+    "title": "Só Por Ti Jesus",
+    "artist": "Eugênio Jorge",
+    "filename": "so_por_ti_jesus.cho",
+    "tags": [
+      "adoração",
+      "ação de graças"
+    ]
+  },
+  {
+    "id": "so_quero_ver_voce",
+    "title": "Só Quero Ver Você",
+    "artist": "Laura Souguellis",
+    "filename": "so_quero_ver_voce.cho",
+    "tags": [
+      "adoração"
+    ]
+  },
+  {
+    "id": "sobe_a_jerusalem",
+    "title": "Sobe A Jerusalém",
+    "artist": "",
+    "filename": "sobe_a_jerusalem.cho",
+    "tags": [
+      "ofertório"
+    ]
+  },
+  {
+    "id": "soberano",
+    "title": "Soberano",
+    "artist": "Tony Allyson",
+    "filename": "soberano.cho",
+    "tags": [
+      "adoração"
     ]
   },
   {
