@@ -1388,6 +1388,108 @@
     ]
   },
   {
+    "id": "sobre_a_duvida",
+    "title": "Sobre A Dúvida",
+    "artist": "Rosa De Saron",
+    "filename": "sobre_a_duvida.cho",
+    "tags": [
+      "adoração"
+    ]
+  },
+  {
+    "id": "sonda_me_usa_me",
+    "title": "Sonda-me, Usa-me",
+    "artist": "Aline Barros",
+    "filename": "sonda_me_usa_me.cho",
+    "tags": [
+      "adoração"
+    ]
+  },
+  {
+    "id": "sopra_em_nos",
+    "title": "Sopra Em Nós",
+    "artist": "Irmã Ana Paula CMES",
+    "filename": "sopra_em_nos.cho",
+    "tags": [
+      "adoração",
+      "espírito santo"
+    ]
+  },
+  {
+    "id": "tao_sublime_sacramento",
+    "title": "Tão Sublime Sacramento",
+    "artist": "Monica Rubia",
+    "filename": "tao_sublime_sacramento.cho",
+    "tags": [
+      "adoração"
+    ]
+  },
+  {
+    "id": "tarde_te_amei",
+    "title": "Tarde Te Amei",
+    "artist": "747",
+    "filename": "tarde_te_amei.cho",
+    "tags": [
+      "final"
+    ]
+  },
+  {
+    "id": "te_adorar",
+    "title": "Te Adorar",
+    "artist": "Walmir Alencar",
+    "filename": "te_adorar.cho",
+    "tags": [
+      "adoração"
+    ]
+  },
+  {
+    "id": "temos_tanto",
+    "title": "Temos Tanto",
+    "artist": "",
+    "filename": "temos_tanto.cho",
+    "tags": [
+      "animação"
+    ]
+  },
+  {
+    "id": "templo_vivo",
+    "title": "Templo Vivo",
+    "artist": "Diego Fernandes",
+    "filename": "templo_vivo.cho",
+    "tags": [
+      "animação",
+      "espírito santo",
+      "entrada"
+    ]
+  },
+  {
+    "id": "terra_seca",
+    "title": "Terra Seca",
+    "artist": "Fraternidade São João Paulo Ii",
+    "filename": "terra_seca.cho",
+    "tags": [
+      "adoração"
+    ]
+  },
+  {
+    "id": "terra_tremeu",
+    "title": "Terra Tremeu",
+    "artist": "",
+    "filename": "terra_tremeu.cho",
+    "tags": [
+      "animação"
+    ]
+  },
+  {
+    "id": "teu_amor_nao_falha",
+    "title": "Teu Amor Não Falha",
+    "artist": "Nívia Soares",
+    "filename": "teu_amor_nao_falha.cho",
+    "tags": [
+      "adoração"
+    ]
+  },
+  {
     "id": "a_ti_meu_deus",
     "title": "A Ti Meu Deus",
     "artist": "",
