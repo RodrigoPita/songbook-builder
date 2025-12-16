@@ -4,7 +4,6 @@
 
 /* Print-specific styles to remove backgrounds and borders */
 @media print {
-
     /* Remove all backgrounds */
     * {
         background: transparent !important;
@@ -28,12 +27,17 @@
         -webkit-print-color-adjust: exact !important;
         print-color-adjust: exact !important;
     }
-
 }
 
 /* iOS-SPECIFIC print fixes - only applies on iOS devices */
 @supports (-webkit-touch-callout: none) {
     @media print {
+        /* iOS-specific page margins */
+        @page {
+            size: A4;
+            margin: 0.5cm; /* Smaller margins for iOS */
+        }
+
         body {
             font-size: 13pt !important;
             margin: 0 !important;
