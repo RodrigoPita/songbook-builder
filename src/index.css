@@ -32,15 +32,15 @@
 /* iOS-SPECIFIC print fixes - only applies on iOS devices */
 @supports (-webkit-touch-callout: none) {
     @media print {
-        /* iOS-specific page margins */
+        /* Try to minimize page margins as much as Safari allows */
         @page {
             size: A4;
-            margin: 0.5cm; /* Smaller margins for iOS */
+            margin: 0;
         }
 
         body {
             font-size: 13pt !important;
-            margin: 0 !important;
+            margin: -0.5cm !important; /* Negative margin to push content out */
             padding: 0 !important;
         }
 
@@ -50,6 +50,15 @@
             text-size-adjust: none !important;
             margin: 0 !important;
             padding: 0 !important;
+        }
+
+        /* Push root content to edges */
+        #root,
+        #root > div {
+            margin: 0 !important;
+            padding: 0.3cm !important; /* Add padding to prevent text cutoff */
+            width: 100% !important;
+            max-width: 100% !important;
         }
 
         /* Override inline styles on pre tags */
