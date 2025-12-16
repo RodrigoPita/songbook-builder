@@ -36,12 +36,16 @@
     @media print {
         body {
             font-size: 13pt !important;
+            margin: 0 !important;
+            padding: 0 !important;
         }
 
         /* Prevent iOS from shrinking content */
         html {
             -webkit-text-size-adjust: none !important;
             text-size-adjust: none !important;
+            margin: 0 !important;
+            padding: 0 !important;
         }
 
         /* Override inline styles on pre tags */
@@ -68,7 +72,8 @@
         div.whitespace-pre-wrap,
         div[class*="whitespace"] {
             margin: 0 !important;
-            padding: 10px !important;
+            padding-top: 6px !important;
+            padding-bottom: 6px !important;
             line-height: 1.1 !important;
         }
 
