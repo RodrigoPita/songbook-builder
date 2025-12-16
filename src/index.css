@@ -29,35 +29,55 @@
         print-color-adjust: exact !important;
     }
 
-    @page {
-        size: A4;
-        margin: 0.75cm;
-    }
 }
 
-/* iOS-SPECIFIC - Match Android spacing exactly */
+/* iOS-SPECIFIC print fixes - only applies on iOS devices */
 @supports (-webkit-touch-callout: none) {
     @media print {
+        body {
+            font-size: 13pt !important;
+        }
 
-        /* Keep text at same size as Android */
+        /* Prevent iOS from shrinking content */
         html {
-            -webkit-text-size-adjust: 100% !important;
+            -webkit-text-size-adjust: none !important;
+            text-size-adjust: none !important;
         }
 
-        /* Match the inline styles from ChordProLine exactly */
+        /* Override inline styles on pre tags */
+        pre {
+            margin: 0 !important;
+            padding: 0 !important;
+            line-height: 1.1 !important;
+            min-height: 0 !important;
+            height: auto !important;
+            font-size: 12pt !important;
+        }
+
+        /* Chord lines - super tight */
+        .chord-line,
         pre.chord-line {
-            line-height: 1.2 !important;
-            min-height: 1rem !important;
+            margin: 0 !important;
+            padding: 0 !important;
+            line-height: 1 !important;
+            min-height: 0 !important;
+            font-size: 11pt !important;
         }
 
-        pre:not(.chord-line) {
-            line-height: 1.4 !important;
-            margin-top: -0.2rem !important;
+        /* Remove ALL spacing from chord/lyric containers */
+        div.whitespace-pre-wrap,
+        div[class*="whitespace"] {
+            margin: 0 !important;
+            padding: 10px !important;
+            line-height: 1.1 !important;
         }
 
-        /* Match the container spacing from Android */
-        div.whitespace-pre-wrap {
-            line-height: 1.5 !important;
+        /* Paragraph and div spacing */
+        p,
+        div {
+            margin: 0 !important;
+            padding: 0 !important;
+            line-height: 1.3 !important;
         }
     }
 }
