@@ -85,8 +85,8 @@
         div.whitespace-pre-wrap,
         div[class*="whitespace"] {
             margin: 0 !important;
-            padding-top: 6px !important;
-            padding-bottom: 6px !important;
+            padding-top: 4px !important;
+            padding-bottom: 4px !important;
             line-height: 1.1 !important;
         }
 
