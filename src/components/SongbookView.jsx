@@ -50,7 +50,7 @@ const SongbookView = ({ category }) => {
         };
     }, [pageTitle]);
 
-    // Handler for PDF export with PDFShift API
+    // Handler for PDF export with Gotenberg API
     const handleExportPdf = async () => {
         try {
             // Get the complete HTML of the songbook
@@ -99,32 +99,29 @@ const SongbookView = ({ category }) => {
                 </html>
             `;
 
-            // PDFShift API Configuration
-            const PDFSHIFT_API_KEY = import.meta.env.VITE_PDFSHIFT_API_KEY;
+            // Gotenberg API Configuration
+            // In development, use Vite proxy (/api/gotenberg)
+            // In production, use environment variable pointing to Cloud Run
+            const GOTENBERG_URL = import.meta.env.VITE_GOTENBERG_URL || '/api/gotenberg';
 
-            if (!PDFSHIFT_API_KEY) {
-                throw new Error('PDFShift API key not configured. Please add VITE_PDFSHIFT_API_KEY to your .env.local file.');
-            }
+            // Create FormData for Gotenberg
+            const formData = new FormData();
+            const htmlBlob = new Blob([fullHtml], { type: 'text/html' });
+            formData.append('files', htmlBlob, 'index.html');
 
-            const response = await fetch('https://api.pdfshift.io/v3/convert/pdf', {
+            // Let CSS @page rules define the paper size and margins
+            formData.append('preferCssPageSize', 'true');
+            formData.append('printBackground', 'true');
+
+            const response = await fetch(`${GOTENBERG_URL}/forms/chromium/convert/html`, {
                 method: 'POST',
-                headers: {
-                    'Authorization': 'Basic ' + btoa(`api:${PDFSHIFT_API_KEY}`),
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    source: fullHtml,
-                    landscape: false,
-                    use_print: true,
-                    format: 'A4',
-                    margin: '0cm' // Let CSS @page rules handle margins
-                })
+                body: formData
             });
 
             if (!response.ok) {
-                const errorData = await response.json().catch(() => ({}));
-                console.error('PDFShift Error:', errorData);
-                throw new Error(`PDF generation failed: ${errorData.error || response.statusText}`);
+                const errorText = await response.text().catch(() => '');
+                console.error('Gotenberg Error:', errorText);
+                throw new Error(`PDF generation failed: ${response.statusText}`);
             }
 
             // Download PDF

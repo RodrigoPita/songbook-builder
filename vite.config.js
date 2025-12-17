@@ -41,6 +41,11 @@ export default defineConfig({
         target: 'https://storage.googleapis.com',
         changeOrigin: true,
         rewrite: (path) => path.replace(/^\/storage/, '')
+      },
+      '/api/gotenberg': {
+        target: 'http://localhost:3000',
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/api\/gotenberg/, '')
       }
     }
   }

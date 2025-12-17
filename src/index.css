@@ -7,6 +7,7 @@
 
     /* Page setup with margins */
     @page {
+        size: A4;
         margin: 1cm 0.5cm 0.5cm 1cm;
         /* top right bottom left */
     }
