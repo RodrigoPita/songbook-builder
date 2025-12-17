@@ -50,6 +50,107 @@ const SongbookView = ({ category }) => {
         };
     }, [pageTitle]);
 
+    // Handler for PDF export with PDFShift API
+    const handleExportPdf = async () => {
+        try {
+            // Get the complete HTML of the songbook
+            const songbookElement = document.getElementById('songbook-preview');
+            if (!songbookElement) {
+                throw new Error('Songbook content not found');
+            }
+
+            // Show loading message
+            const exportButton = document.querySelector('[data-export-button]');
+            if (exportButton) {
+                exportButton.textContent = 'Gerando PDF...';
+                exportButton.disabled = true;
+            }
+
+            // Clone and prepare HTML for PDF
+            const clone = songbookElement.cloneNode(true);
+
+            // Remove elements with print:hidden class
+            clone.querySelectorAll('[class*="print:hidden"]').forEach(el => el.remove());
+
+            // Get all styles
+            const styles = Array.from(document.styleSheets)
+                .map(sheet => {
+                    try {
+                        return Array.from(sheet.cssRules)
+                            .map(rule => rule.cssText)
+                            .join('\n');
+                    } catch (e) {
+                        return '';
+                    }
+                })
+                .join('\n');
+
+            // Create complete HTML document
+            const fullHtml = `
+                <!DOCTYPE html>
+                <html>
+                <head>
+                    <meta charset="UTF-8">
+                    <style>${styles}</style>
+                </head>
+                <body style="margin: 0; padding: 1cm;">
+                    ${clone.innerHTML}
+                </body>
+                </html>
+            `;
+
+            // PDFShift API Configuration
+            const PDFSHIFT_API_KEY = import.meta.env.VITE_PDFSHIFT_API_KEY;
+
+            if (!PDFSHIFT_API_KEY) {
+                throw new Error('PDFShift API key not configured. Please add VITE_PDFSHIFT_API_KEY to your .env.local file.');
+            }
+
+            const response = await fetch('https://api.pdfshift.io/v3/convert/pdf', {
+                method: 'POST',
+                headers: {
+                    'Authorization': 'Basic ' + btoa(`api:${PDFSHIFT_API_KEY}`),
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    source: fullHtml,
+                    landscape: false,
+                    use_print: true,
+                    format: 'A4',
+                    margin: '0cm' // Let CSS @page rules handle margins
+                })
+            });
+
+            if (!response.ok) {
+                const errorData = await response.json().catch(() => ({}));
+                console.error('PDFShift Error:', errorData);
+                throw new Error(`PDF generation failed: ${errorData.error || response.statusText}`);
+            }
+
+            // Download PDF
+            const blob = await response.blob();
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `${pageTitle}-${new Date().toISOString().split('T')[0]}.pdf`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            window.URL.revokeObjectURL(url);
+
+        } catch (error) {
+            console.error('PDF export error:', error);
+            alert('Erro ao gerar PDF. Por favor, tente novamente.');
+        } finally {
+            // Reset button
+            const exportButton = document.querySelector('[data-export-button]');
+            if (exportButton) {
+                exportButton.textContent = 'Exportar PDF';
+                exportButton.disabled = false;
+            }
+        }
+    };
+
     // Loading state
     if (loading) {
         return (
@@ -111,7 +212,7 @@ const SongbookView = ({ category }) => {
                     onShiftChange={handleShiftChange}
                     onRemoveSong={handleRemoveSong}
                     onOpenReorder={() => setIsReorderPanelOpen(true)}
-                    onExportPdf={() => window.print()}
+                    onExportPdf={handleExportPdf}
                 />
             </div>
 
