@@ -4,6 +4,18 @@
 
 /* Print-specific styles to remove backgrounds and borders */
 @media print {
+
+    /* Page setup with margins */
+    @page {
+        margin: 1cm 0.5cm 0.5cm 1cm;
+        /* top right bottom left */
+    }
+
+    /* First page has less top margin */
+    @page :first {
+        margin-top: 1cm;
+    }
+
     /* Remove all backgrounds */
     * {
         background: transparent !important;
@@ -14,6 +26,8 @@
     body,
     html {
         background: white !important;
+        margin: 0 !important;
+        padding: 0 !important;
     }
 
     /* Remove borders from song cards */
@@ -27,75 +41,51 @@
         -webkit-print-color-adjust: exact !important;
         print-color-adjust: exact !important;
     }
-}
 
-/* iOS-SPECIFIC print fixes - only applies on iOS devices */
-@supports (-webkit-touch-callout: none) {
-    @media print {
-        /* Try to minimize page margins as much as Safari allows */
-        @page {
-            size: A4;
-            margin: 0;
-        }
+    /* Decrease font sizes for more compact PDFs */
+    body {
+        font-size: 11pt !important;
+        line-height: 1.4 !important;
+        /* Slight vertical spacing */
+    }
 
-        body {
-            font-size: 13pt !important;
-            margin: -0.5cm !important; /* Negative margin to push content out */
-            padding: 0 !important;
-        }
+    /* Title sizes */
+    h1,
+    h2,
+    h3 {
+        font-size: 16pt !important;
+        line-height: 1.3 !important;
+        /* Tighter for titles */
+    }
 
-        /* Prevent iOS from shrinking content */
-        html {
-            -webkit-text-size-adjust: none !important;
-            text-size-adjust: none !important;
-            margin: 0 !important;
-            padding: 0 !important;
-        }
+    /* Chord lines */
+    .chord-line,
+    pre.chord-line {
+        font-size: 11pt !important;
+        line-height: 1.2 !important;
+        /* Tight for chords */
+    }
 
-        /* Push root content to edges */
-        #root,
-        #root > div {
-            margin: 0 !important;
-            padding: 0.3cm !important; /* Add padding to prevent text cutoff */
-            width: 100% !important;
-            max-width: 100% !important;
-        }
+    /* Regular text and lyrics */
+    pre:not(.chord-line) {
+        font-size: 12pt !important;
+        line-height: 1.5 !important;
+        /* More breathing room for lyrics */
+    }
 
-        /* Override inline styles on pre tags */
-        pre {
-            margin: 0 !important;
-            padding: 0 !important;
-            line-height: 1.1 !important;
-            min-height: 0 !important;
-            height: auto !important;
-            font-size: 12pt !important;
-        }
+    /* Metadata text */
+    p {
+        font-size: 11pt !important;
+        line-height: 1.3 !important;
+    }
 
-        /* Chord lines - super tight */
-        .chord-line,
-        pre.chord-line {
-            margin: 0 !important;
-            padding: 0 !important;
-            line-height: 1 !important;
-            min-height: 0 !important;
-            font-size: 11pt !important;
-        }
+    /* Page break handling */
+    .print-song-page {
+        page-break-inside: avoid;
+        page-break-after: always;
+    }
 
-        /* Remove ALL spacing from chord/lyric containers */
-        div.whitespace-pre-wrap,
-        div[class*="whitespace"] {
-            margin: 0 !important;
-            padding-top: 4px !important;
-            padding-bottom: 4px !important;
-            line-height: 1.1 !important;
-        }
-
-        /* Paragraph and div spacing */
-        p,
-        div {
-            margin: 0 !important;
-            padding: 0 !important;
-            line-height: 1.3 !important;
-        }
+    .print-song-page:last-child {
+        page-break-after: auto;
     }
 }
