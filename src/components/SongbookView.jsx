@@ -50,6 +50,112 @@ const SongbookView = ({ category }) => {
         };
     }, [pageTitle]);
 
+    // Handler for PDF export with Gotenberg API
+    const handleExportPdf = async () => {
+        try {
+            // Get the complete HTML of the songbook
+            const songbookElement = document.getElementById('songbook-preview');
+            if (!songbookElement) {
+                throw new Error('Songbook content not found');
+            }
+
+            // Show loading message
+            const exportButton = document.querySelector('[data-export-button]');
+            if (exportButton) {
+                exportButton.textContent = 'Gerando PDF...';
+                exportButton.disabled = true;
+            }
+
+            // Clone and prepare HTML for PDF
+            const clone = songbookElement.cloneNode(true);
+
+            // Remove elements with print:hidden class
+            clone.querySelectorAll('[class*="print:hidden"]').forEach(el => el.remove());
+
+            // Get all styles
+            const styles = Array.from(document.styleSheets)
+                .map(sheet => {
+                    try {
+                        return Array.from(sheet.cssRules)
+                            .map(rule => rule.cssText)
+                            .join('\n');
+                    } catch (e) {
+                        return '';
+                    }
+                })
+                .join('\n');
+
+            // Create complete HTML document
+            const fullHtml = `
+                <!DOCTYPE html>
+                <html>
+                <head>
+                    <meta charset="UTF-8">
+                    <style>${styles}</style>
+                </head>
+                <body style="margin: 0; padding: 1cm;">
+                    ${clone.innerHTML}
+                </body>
+                </html>
+            `;
+
+            // Gotenberg API Configuration
+            // In development, use Vite proxy (/api/gotenberg)
+            // In production, use environment variable pointing to Cloud Run
+            const GOTENBERG_URL = import.meta.env.VITE_GOTENBERG_URL || '/api/gotenberg';
+            const GOTENBERG_API_KEY = import.meta.env.VITE_GOTENBERG_API_KEY;
+
+            // Create FormData for Gotenberg
+            const formData = new FormData();
+            const htmlBlob = new Blob([fullHtml], { type: 'text/html' });
+            formData.append('files', htmlBlob, 'index.html');
+
+            // Let CSS @page rules define the paper size and margins
+            formData.append('preferCssPageSize', 'true');
+            formData.append('printBackground', 'true');
+
+            // Prepare headers
+            const headers = {};
+            if (GOTENBERG_API_KEY) {
+                headers['X-API-Key'] = GOTENBERG_API_KEY;
+            }
+
+            const response = await fetch(`${GOTENBERG_URL}/forms/chromium/convert/html`, {
+                method: 'POST',
+                headers: headers,
+                body: formData
+            });
+
+            if (!response.ok) {
+                const errorText = await response.text().catch(() => '');
+                console.error('Gotenberg Error:', errorText);
+                throw new Error(`PDF generation failed: ${response.statusText}`);
+            }
+
+            // Download PDF
+            const blob = await response.blob();
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `${pageTitle}-${new Date().toISOString().split('T')[0]}.pdf`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            window.URL.revokeObjectURL(url);
+
+        } catch (error) {
+            console.error('PDF export error:', error);
+            alert('Erro ao gerar PDF. Por favor, tente novamente.');
+        } finally {
+            // Reset button
+            const exportButton = document.querySelector('[data-export-button]');
+            if (exportButton) {
+                exportButton.textContent = 'Exportar PDF';
+                exportButton.disabled = false;
+            }
+        }
+    };
+
     // Loading state
     if (loading) {
         return (
@@ -111,7 +217,7 @@ const SongbookView = ({ category }) => {
                     onShiftChange={handleShiftChange}
                     onRemoveSong={handleRemoveSong}
                     onOpenReorder={() => setIsReorderPanelOpen(true)}
-                    onExportPdf={() => window.print()}
+                    onExportPdf={handleExportPdf}
                 />
             </div>
 

@@ -46,6 +46,7 @@ const SongbookPreview = ({
                     <button
                         onClick={onExportPdf}
                         disabled={songs.length === 0}
+                        data-export-button
                         className={`flex items-center px-4 sm:px-6 py-2 rounded-full text-sm sm:text-base font-semibold transition duration-300 transform hover:scale-105 shadow-lg
                             ${songs.length > 0
                                 ? 'bg-emerald-600 text-white hover:bg-emerald-700 active:bg-emerald-800'
@@ -87,8 +88,8 @@ const SongbookPreview = ({
                                         <Minus className="w-4 h-4" />
                                     </button>
                                     <span className={`px-3 py-1 font-semibold rounded-lg text-sm transition-colors ${(semitoneShift[song.id] || 0) === 0
-                                            ? 'bg-gray-200 text-gray-700'
-                                            : 'bg-emerald-500 text-white'
+                                        ? 'bg-gray-200 text-gray-700'
+                                        : 'bg-emerald-500 text-white'
                                         }`}>
                                         {semitoneShift[song.id] || 0}
                                     </span>
