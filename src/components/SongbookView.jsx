@@ -103,6 +103,7 @@ const SongbookView = ({ category }) => {
             // In development, use Vite proxy (/api/gotenberg)
             // In production, use environment variable pointing to Cloud Run
             const GOTENBERG_URL = import.meta.env.VITE_GOTENBERG_URL || '/api/gotenberg';
+            const GOTENBERG_API_KEY = import.meta.env.VITE_GOTENBERG_API_KEY;
 
             // Create FormData for Gotenberg
             const formData = new FormData();
@@ -113,8 +114,15 @@ const SongbookView = ({ category }) => {
             formData.append('preferCssPageSize', 'true');
             formData.append('printBackground', 'true');
 
+            // Prepare headers
+            const headers = {};
+            if (GOTENBERG_API_KEY) {
+                headers['X-API-Key'] = GOTENBERG_API_KEY;
+            }
+
             const response = await fetch(`${GOTENBERG_URL}/forms/chromium/convert/html`, {
                 method: 'POST',
+                headers: headers,
                 body: formData
             });
 
