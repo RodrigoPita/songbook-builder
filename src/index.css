@@ -59,17 +59,17 @@
         /* Tighter for titles */
     }
 
-    /* Chord lines */
+    /* Chord lines and lyrics MUST use same font size for alignment */
     .chord-line,
     pre.chord-line {
-        font-size: 11pt !important;
+        font-size: 11.7pt !important;
         line-height: 1.2 !important;
         /* Tight for chords */
     }
 
-    /* Regular text and lyrics */
+    /* Regular text and lyrics - MUST match chord font size */
     pre:not(.chord-line) {
-        font-size: 12pt !important;
+        font-size: 11.7pt !important;
         line-height: 1.5 !important;
         /* More breathing room for lyrics */
     }
