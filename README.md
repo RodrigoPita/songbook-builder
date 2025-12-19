@@ -10,7 +10,7 @@
 
 </div>
 
-A simple web app to create, transpose, and export multi-page PDF songbooks from ChordPro charts.
+A web app to create, transpose, and export professional multi-page PDF songbooks from ChordPro charts using Gotenberg for reliable PDF generation.
 
 ---
 
@@ -18,11 +18,12 @@ A simple web app to create, transpose, and export multi-page PDF songbooks from 
 
 * **🎼 Song Selection:** Build custom songbooks by selecting from your song library
 * **🎹 Live Transposition:** Instantly transpose songs up or down to any key with visual feedback
-* **📄 PDF Export:** Generate clean, printer-friendly PDFs with proper page breaks
+* **📄 Professional PDF Export:** Generate consistent, high-quality PDFs using Gotenberg API with proper formatting and alignment
 * **🔍 Smart Search:** Quickly find songs by title or artist
 * **🌐 Web-Based:** No installation required—runs entirely in your browser
-* **💾 Local Storage:** Songs are loaded from ChordPro `.cho` files in your project
+* **💾 Cloud Storage:** Songs are loaded from Firebase Storage with real-time sync
 * **📱 Responsive Design:** Works seamlessly on desktop, tablet, and mobile devices
+* **♻️ Drag & Reorder:** Easily reorganize songs in your songbook with drag-and-drop
 
 ---
 
@@ -31,8 +32,9 @@ A simple web app to create, transpose, and export multi-page PDF songbooks from 
 1.  **Visit the App:** Navigate to the [Songbook Builder live page](https://rodrigopita.github.io/songbook-builder/)
 2.  **Browse Songs:** Click the sidebar icon (☰) to open the song index
 3.  **Search & Select:** Use the search bar to find songs, then click to add them to your songbook
-4.  **Transpose:** Use the `+` and `-` buttons to transpose each song. Click `×` to reset to original key
-5.  **Export PDF:** Click "Export PDF" to print or save your custom songbook
+4.  **Transpose:** Use the `+` and `-` buttons to transpose each song to your preferred key
+5.  **Reorder:** Click the reorder button to drag and rearrange songs in your preferred sequence
+6.  **Export PDF:** Click "Exportar PDF" to generate a professional PDF via Gotenberg service
 
 ---
 
@@ -42,8 +44,10 @@ A simple web app to create, transpose, and export multi-page PDF songbooks from 
 * **Vite** - Lightning-fast build tool and dev server
 * **TailwindCSS** - Utility-first CSS framework for rapid styling
 * **Lucide React** - Beautiful, consistent icon library
+* **Firebase** - Cloud Firestore for song metadata and Storage for ChordPro files
+* **Gotenberg API** - Server-side PDF generation for consistent, professional output
 * **Custom ChordPro Parser** - In-house logic for parsing and transposing chord charts
-* **Browser Print API** - Native PDF generation without external dependencies
+* **dnd-kit** - Modern drag-and-drop library for song reordering
 
 ---
 
@@ -68,26 +72,43 @@ A simple web app to create, transpose, and export multi-page PDF songbooks from 
    npm install
    ```
 
-3. **Configure Firebase:**
-   
+3. **Configure Environment Variables:**
+
    Create a `.env.local` file in the root directory:
    ```env
+   # Firebase Configuration
    VITE_FIREBASE_API_KEY=your_api_key
    VITE_FIREBASE_AUTH_DOMAIN=your-project.firebaseapp.com
    VITE_FIREBASE_PROJECT_ID=your-project-id
    VITE_FIREBASE_STORAGE_BUCKET=your-project.appspot.com
    VITE_FIREBASE_MESSAGING_SENDER_ID=123456789
    VITE_FIREBASE_APP_ID=1:123456789:web:abc123
+
+   # Gotenberg Configuration (for PDF generation)
+   VITE_GOTENBERG_URL=https://your-gotenberg-service.run.app
+   VITE_GOTENBERG_API_KEY=your_api_key_here
    ```
 
-   > 💡 **Tip:** Copy `.env.example` and fill in your Firebase credentials
+   > 💡 **Note:** In development, Gotenberg requests use the proxy configured in `vite.config.js` (`/api/gotenberg` → `http://localhost:3000`)
 
-4. **Start the development server:**
+4. **Run Gotenberg Service (for PDF generation):**
+
+   You need a Gotenberg instance running locally or use a deployed service:
+
+   **Option A: Local Docker (Recommended for development)**
+   ```bash
+   docker run -d -p 3000:3000 gotenberg/gotenberg:8
+   ```
+
+   **Option B: Use deployed Gotenberg service**
+   Set `VITE_GOTENBERG_URL` in `.env.local` to your Cloud Run or hosted Gotenberg URL
+
+5. **Start the development server:**
    ```bash
    npm run dev
    ```
 
-5. **Open in browser:**
+6. **Open in browser:**
    ```
    http://localhost:5173
    ```
@@ -173,6 +194,22 @@ For running sync scripts locally:
 2. Click **Generate new private key**
 3. Save as `serviceAccountKey.json` in project root
 4. ⚠️ **Important:** This file is in `.gitignore` - never commit it!
+
+---
+
+## 📄 Gotenberg PDF Service
+
+This app uses [Gotenberg](https://gotenberg.dev/) for server-side PDF generation to ensure consistent formatting across all devices.
+
+You'll need either:
+- A local Gotenberg instance: `docker run -d -p 3000:3000 gotenberg/gotenberg:8`
+- A deployed Gotenberg service (see [gottenberg-service](../gottenberg-service/) for proxy setup)
+
+Configure via environment variables:
+```env
+VITE_GOTENBERG_URL=https://your-gotenberg-service.run.app
+VITE_GOTENBERG_API_KEY=your_api_key
+```
 
 ---
 
@@ -279,9 +316,9 @@ npm run deploy     # Build and deploy to GitHub Pages
 ### **Deploy to GitHub Pages**
 
 1. **Configure GitHub Secrets:**
-   
+
    Go to: `Settings → Secrets and variables → Actions`
-   
+
    Add these secrets:
    - `VITE_FIREBASE_API_KEY`
    - `VITE_FIREBASE_AUTH_DOMAIN`
@@ -289,6 +326,8 @@ npm run deploy     # Build and deploy to GitHub Pages
    - `VITE_FIREBASE_STORAGE_BUCKET`
    - `VITE_FIREBASE_MESSAGING_SENDER_ID`
    - `VITE_FIREBASE_APP_ID`
+   - `VITE_GOTENBERG_URL`
+   - `VITE_GOTENBERG_API_KEY`
 
 2. **Deploy:**
    ```bash
@@ -334,6 +373,8 @@ jobs:
         VITE_FIREBASE_STORAGE_BUCKET: ${{ secrets.VITE_FIREBASE_STORAGE_BUCKET }}
         VITE_FIREBASE_MESSAGING_SENDER_ID: ${{ secrets.VITE_FIREBASE_MESSAGING_SENDER_ID }}
         VITE_FIREBASE_APP_ID: ${{ secrets.VITE_FIREBASE_APP_ID }}
+        VITE_GOTENBERG_URL: ${{ secrets.VITE_GOTENBERG_URL }}
+        VITE_GOTENBERG_API_KEY: ${{ secrets.VITE_GOTENBERG_API_KEY }}
       run: npm run build
     
     - name: Deploy
@@ -352,18 +393,30 @@ Now every push to `main` automatically deploys! 🎉
 ```
 songbook-builder/
 ├── public/
-│   ├── index.json       # Song metadata
-│   └── charts/          # Song files (.cho) and index.json
-│       └── *.cho        # ChordPro song files
+│   ├── index.json              # Song metadata index
+│   └── charts/                 # ChordPro song files (.cho)
 ├── src/
-│   ├── components/      # React components
-│   ├── hooks/           # Custom React hooks
-│   ├── utils/           # Utilities (transposition, parsing)
-│   ├── constants/       # Music theory constants
-│   ├── App.jsx          # Main app component
-│   └── main.jsx         # Entry point
-├── vite.config.js       # Vite configuration
-└── package.json         # Project dependencies
+│   ├── components/
+│   │   ├── ChordProLine.jsx    # Renders chord/lyric line pairs
+│   │   ├── Header.jsx          # App header with navigation
+│   │   ├── LandingPage.jsx     # Home/category selection page
+│   │   ├── ReorderPanel.jsx    # Drag-and-drop song reordering
+│   │   ├── Sidebar.jsx         # Song library browser
+│   │   ├── SongPreviewBlock.jsx # Individual song card
+│   │   ├── SongbookPreview.jsx # Songbook preview with controls
+│   │   └── SongbookView.jsx    # Main songbook container
+│   ├── hooks/
+│   │   └── useSongbook.js      # Custom hook for songbook state
+│   ├── utils/
+│   │   ├── chordProcessor.js   # ChordPro parsing logic
+│   │   └── transposition.js    # Key transposition utilities
+│   ├── constants/
+│   │   └── musicTheory.js      # Key signatures and note mappings
+│   ├── App.jsx                 # Main app with routing
+│   ├── main.jsx                # Entry point
+│   └── index.css               # Global styles (including print styles)
+├── vite.config.js              # Vite config with proxies
+└── package.json                # Dependencies
 ```
 
 ---
@@ -404,6 +457,19 @@ With **300 songs** and **1,000 users/month**:
 
 - Ensure `{key: X}` directive is present in `.cho` file
 - Run `npm run sync` to update metadata
+
+### **PDF export fails or shows errors**
+
+1. Check that Gotenberg service is running and accessible
+2. Verify `VITE_GOTENBERG_URL` and `VITE_GOTENBERG_API_KEY` are set correctly
+3. Check browser console for detailed error messages
+4. For local development, ensure Docker container is running: `docker ps`
+
+### **Chord/lyric alignment issues in PDF**
+
+- Chords and lyrics must use identical font sizes in print styles
+- Check [index.css](src/index.css) `@media print` section
+- Both `.chord-line` and `pre:not(.chord-line)` should have matching `font-size`
 
 ### **Build fails**
 
