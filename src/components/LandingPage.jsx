@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { BookOpen, Music2 } from 'lucide-react';
+import { BookOpen, Music2, FileText } from 'lucide-react';
 
 const LandingPage = () => {
     return (
@@ -18,7 +18,7 @@ const LandingPage = () => {
             </div>
 
             {/* Cards */}
-            <div className="grid md:grid-cols-2 gap-6 max-w-4xl w-full">
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl w-full">
                 {/* Vozes de Hipona Card */}
                 <Link
                     to="/vozes-de-hipona"
@@ -67,6 +67,32 @@ const LandingPage = () => {
 
                     <div className="flex items-center text-purple-600 font-semibold group-hover:translate-x-2 transition-transform duration-300">
                         Open Repertoire
+                        <span className="ml-2 text-2xl">→</span>
+                    </div>
+                </Link>
+
+                {/* Chart Editor Card */}
+                <Link
+                    to="/editor"
+                    className="group bg-white rounded-2xl p-8 shadow-lg hover:shadow-2xl transition-all duration-300 hover:scale-105 border-2 border-blue-200 hover:border-blue-400"
+                >
+                    <div className="flex items-center justify-between mb-4">
+                        <FileText className="w-12 h-12 text-blue-600" />
+                        <svg className="w-6 h-6 text-blue-400 opacity-0 group-hover:opacity-100 transition-opacity duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                        </svg>
+                    </div>
+
+                    <h2 className="text-3xl font-bold text-gray-800 mb-3">
+                        Chart Editor
+                    </h2>
+
+                    <p className="text-gray-600 text-lg mb-6">
+                        Create and test ChordPro charts with live preview and transpose controls.
+                    </p>
+
+                    <div className="flex items-center text-blue-600 font-semibold group-hover:translate-x-2 transition-transform duration-300">
+                        Open Editor
                         <span className="ml-2 text-2xl">→</span>
                     </div>
                 </Link>
