@@ -6,6 +6,7 @@ import { getTargetKeyFromShift } from '../utils/transposition';
 const DEFAULT_CHORDPRO = `{title: New Song}
 {artist: Artist Name}
 {key: C}
+{tags: genre}
 
 {start_of_chorus}
 [C]Sample lyric with [Am]chords above
