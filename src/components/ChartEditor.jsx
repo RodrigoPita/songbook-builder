@@ -262,7 +262,7 @@ const ChartEditor = () => {
                             style={{ zoom: '0.8' }}
                         >
                             {/* Song Header */}
-                            <div className="mb-4 pb-3 border-b border-gray-300">
+                            <div className="mb-4 pb-3 border-b border-gray-300 print:border-0">
                                 <h3 className="text-2xl font-extrabold text-gray-800">
                                     {metadata.title}
                                     {metadata.artist && (
