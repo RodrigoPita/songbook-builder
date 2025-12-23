@@ -1,4 +1,5 @@
 import { X, Plus, Loader } from 'lucide-react';
+import { getTagColor } from '../../utils/tagColors';
 
 /**
  * Songs View - Shows list of songs with tag editing for individual songs
@@ -39,14 +40,18 @@ const TagManagerSongsView = ({
                 )}
                 {song.tags && song.tags.length > 0 && (
                   <div className="flex flex-wrap gap-1 mt-2">
-                    {song.tags.map(tag => (
-                      <span
-                        key={tag}
-                        className="px-2 py-0.5 bg-gray-100 text-gray-700 rounded text-xs"
-                      >
-                        {tag}
-                      </span>
-                    ))}
+                    {song.tags.map(tag => {
+                      const colors = getTagColor(tag);
+                      return (
+                        <span
+                          key={tag}
+                          className="px-2 py-0.5 rounded text-xs"
+                          style={{ backgroundColor: colors.bg, color: colors.text }}
+                        >
+                          {tag}
+                        </span>
+                      );
+                    })}
                   </div>
                 )}
               </button>
@@ -69,21 +74,26 @@ const TagManagerSongsView = ({
                 </label>
                 <div className="flex flex-wrap gap-2 min-h-[40px] p-3 border-2 border-gray-200 rounded-lg">
                   {selectedSong.tags && selectedSong.tags.length > 0 ? (
-                    selectedSong.tags.map(tag => (
-                      <span
-                        key={tag}
-                        className="inline-flex items-center gap-1 px-3 py-1 bg-emerald-100 text-emerald-800 rounded-full font-medium"
-                      >
-                        {tag}
-                        <button
-                          onClick={() => onRemoveTag(tag)}
-                          disabled={saving}
-                          className="hover:bg-emerald-200 rounded-full p-0.5 transition disabled:opacity-50"
+                    selectedSong.tags.map(tag => {
+                      const colors = getTagColor(tag);
+                      return (
+                        <span
+                          key={tag}
+                          className="inline-flex items-center gap-1 px-3 py-1 rounded-full font-medium"
+                          style={{ backgroundColor: colors.bg, color: colors.text }}
                         >
-                          <X className="w-3 h-3" />
-                        </button>
-                      </span>
-                    ))
+                          {tag}
+                          <button
+                            onClick={() => onRemoveTag(tag)}
+                            disabled={saving}
+                            className="rounded-full p-0.5 transition disabled:opacity-50 hover:opacity-75"
+                            style={{ backgroundColor: colors.hover }}
+                          >
+                            <X className="w-3 h-3" />
+                          </button>
+                        </span>
+                      );
+                    })
                   ) : (
                     <span className="text-gray-500 text-sm">No tags yet</span>
                   )}
