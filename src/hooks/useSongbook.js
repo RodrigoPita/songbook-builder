@@ -20,6 +20,7 @@ export function useSongbook(category = 'vozes-de-hipona') {
     const [selectedSongIds, setSelectedSongIds] = useState([]);
     const [semitoneShift, setSemitoneShift] = useState({});
     const [searchTerm, setSearchTerm] = useState('');
+    const [selectedTagFilters, setSelectedTagFilters] = useState([]);
 
     // Determine collection and storage path based on category
     // 'vozes-de-hipona' uses 'songs' collection and 'charts' storage for backward compatibility
@@ -165,27 +166,59 @@ export function useSongbook(category = 'vozes-de-hipona') {
         setSelectedSongIds(newIds);
     }, [selectedSongIds]);
 
-    // Songs filtered by search (includes tags!) - now accent-insensitive
-    const filteredSongs = useMemo(() => {
-        if (!searchTerm.trim()) return allSongs;
-
-        const normalizedTerm = normalizeText(searchTerm);
-
-        return allSongs.filter(song => {
-            // Search in title (accent-insensitive)
-            if (normalizeText(song.title).includes(normalizedTerm)) return true;
-
-            // Search in artist (accent-insensitive)
-            if (song.artist && normalizeText(song.artist).includes(normalizedTerm)) return true;
-
-            // Search in tags (accent-insensitive)
-            if (song.tags && Array.isArray(song.tags)) {
-                if (song.tags.some(tag => normalizeText(tag).includes(normalizedTerm))) return true;
-            }
-
-            return false;
+    // Get all unique tags with counts
+    const allTagsWithCounts = useMemo(() => {
+        const tagMap = new Map();
+        allSongs.forEach(song => {
+            (song.tags || []).forEach(tag => {
+                tagMap.set(tag, (tagMap.get(tag) || 0) + 1);
+            });
         });
-    }, [allSongs, searchTerm]);
+        return Array.from(tagMap.entries())
+            .map(([tag, count]) => ({ tag, count }))
+            .sort((a, b) => a.tag.localeCompare(b.tag));
+    }, [allSongs]);
+
+    // Toggle tag filter
+    const toggleTagFilter = useCallback((tag) => {
+        setSelectedTagFilters(prev =>
+            prev.includes(tag) ? prev.filter(t => t !== tag) : [...prev, tag]
+        );
+    }, []);
+
+    // Songs filtered by search and tag filters - accent-insensitive
+    const filteredSongs = useMemo(() => {
+        let filtered = allSongs;
+
+        // Apply tag filters first
+        if (selectedTagFilters.length > 0) {
+            filtered = filtered.filter(song =>
+                selectedTagFilters.every(tag => (song.tags || []).includes(tag))
+            );
+        }
+
+        // Then apply search term
+        if (searchTerm.trim()) {
+            const normalizedTerm = normalizeText(searchTerm);
+
+            filtered = filtered.filter(song => {
+                // Search in title (accent-insensitive)
+                if (normalizeText(song.title).includes(normalizedTerm)) return true;
+
+                // Search in artist (accent-insensitive)
+                if (song.artist && normalizeText(song.artist).includes(normalizedTerm)) return true;
+
+                // Search in tags (accent-insensitive)
+                if (song.tags && Array.isArray(song.tags)) {
+                    if (song.tags.some(tag => normalizeText(tag).includes(normalizedTerm))) return true;
+                }
+
+                return false;
+            });
+        }
+
+        return filtered;
+    }, [allSongs, searchTerm, selectedTagFilters]);
 
     // Selected songs with content and transposition
     const selectedSongs = useMemo(() => {
@@ -219,6 +252,9 @@ export function useSongbook(category = 'vozes-de-hipona') {
         reorderSongs,
         loading,
         error,
-        reloadSongs: loadSongsMetadata
+        reloadSongs: loadSongsMetadata,
+        allTagsWithCounts,
+        selectedTagFilters,
+        toggleTagFilter
     };
 }

@@ -24,7 +24,10 @@ const SongbookView = ({ category }) => {
         filteredSongs,
         loading,
         error,
-        reloadSongs
+        reloadSongs,
+        allTagsWithCounts,
+        selectedTagFilters,
+        toggleTagFilter
     } = useSongbook(category);
 
     // Handler for removing a song from the preview
@@ -210,6 +213,9 @@ const SongbookView = ({ category }) => {
                     onToggleSong={toggleSongSelection}
                     searchTerm={searchTerm}
                     onSearchChange={setSearchTerm}
+                    allTagsWithCounts={allTagsWithCounts}
+                    selectedTagFilters={selectedTagFilters}
+                    toggleTagFilter={toggleTagFilter}
                 />
                 <SongbookPreview
                     songs={selectedSongs}
