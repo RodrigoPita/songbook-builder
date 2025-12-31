@@ -1,4 +1,14 @@
 /**
+ * Normalize string by removing accents and converting to ASCII
+ */
+function normalizeString(str) {
+  return str
+    .normalize('NFD') // Decompose accented characters
+    .replace(/[\u0300-\u036f]/g, '') // Remove diacritics
+    .toLowerCase();
+}
+
+/**
  * Extract metadata from ChordPro content
  * Matches the format used in scripts/syncSongs.js
  */
@@ -18,10 +28,10 @@ export function extractMetadata(content, filename = '') {
       .filter(tag => tag.length > 0);
   }
 
-  // Generate ID from filename or title
+  // Generate ID from filename or title with proper normalization
   const id = filename
     ? filename.replace('.cho', '')
-    : title.replace(/[^a-z0-9]/gi, '_').toLowerCase();
+    : normalizeString(title).replace(/[^a-z0-9]/gi, '_');
 
   return {
     id,
@@ -39,5 +49,5 @@ export function generateFilename(title) {
   if (!title || !title.trim()) {
     return `untitled_${Date.now()}.cho`;
   }
-  return `${title.replace(/[^a-z0-9]/gi, '_').toLowerCase()}.cho`;
+  return `${normalizeString(title).replace(/[^a-z0-9]/gi, '_')}.cho`;
 }

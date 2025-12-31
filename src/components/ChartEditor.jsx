@@ -79,7 +79,7 @@ const ChartEditor = () => {
         const url = window.URL.createObjectURL(blob);
         const a = document.createElement('a');
         a.href = url;
-        a.download = `${metadata.title.replace(/[^a-z0-9]/gi, '_').toLowerCase()}.cho`;
+        a.download = generateFilename(metadata.title);
         document.body.appendChild(a);
         a.click();
         document.body.removeChild(a);
@@ -218,7 +218,8 @@ const ChartEditor = () => {
             const url = window.URL.createObjectURL(blob);
             const a = document.createElement('a');
             a.href = url;
-            a.download = `${metadata.title.replace(/[^a-z0-9]/gi, '_').toLowerCase()}-${new Date().toISOString().split('T')[0]}.pdf`;
+            const pdfFilename = generateFilename(metadata.title).replace('.cho', `.pdf`);
+            a.download = pdfFilename;
             document.body.appendChild(a);
             a.click();
             document.body.removeChild(a);
@@ -417,32 +418,37 @@ const ChartEditor = () => {
                             <FileText className="w-5 h-5 mr-2 text-emerald-600" />
                             Live Preview
                         </h2>
-                        <div
-                            id="chart-preview"
-                            className="border border-gray-200 rounded-lg p-6 flex-1 overflow-y-auto bg-gray-50"
-                            style={{ zoom: '0.8' }}
-                        >
-                            {/* Song Header */}
-                            <div className="mb-4 pb-3 border-b border-gray-300 print:border-0">
-                                <h3 className="text-2xl font-extrabold text-gray-800">
-                                    {metadata.title}
-                                    {metadata.artist && (
-                                        <span className="text-xl font-normal text-gray-600 ml-2">
-                                            ({metadata.artist})
-                                        </span>
-                                    )}
-                                </h3>
-                                <p className="text-xs font-medium text-gray-500 mt-1">
-                                    <span className="font-semibold text-emerald-600">Tom Atual:</span>
-                                    <span className="font-bold ml-1">{targetKey}</span>
-                                    <span className="text-gray-300 mx-1">|</span>
-                                    <span>Original: {songKey} ({shiftText})</span>
-                                </p>
-                            </div>
+                        <div className="flex-1 overflow-y-auto bg-gray-50 border border-gray-200 rounded-lg">
+                            {/* Inner container with zoom to simulate main app width in split view */}
+                            <div
+                                id="chart-preview"
+                                className="p-3 sm:p-4 lg:p-6"
+                                style={{ zoom: '0.65' }}
+                            >
+                                <div className="max-w-4xl mx-auto">
+                                    {/* Song Header */}
+                                    <div className="mb-3 sm:mb-4 pb-2 border-b border-gray-200 print:border-b-0">
+                                        <h3 className="text-lg sm:text-xl md:text-2xl lg:text-3xl font-extrabold text-gray-800 leading-tight break-words">
+                                            {metadata.title}
+                                            {metadata.artist && (
+                                                <span className="text-base sm:text-lg md:text-xl lg:text-2xl font-normal text-gray-600 ml-2">
+                                                    ({metadata.artist})
+                                                </span>
+                                            )}
+                                        </h3>
+                                        <p className="text-[10px] sm:text-xs md:text-sm font-medium text-gray-500 flex flex-wrap items-center gap-1">
+                                            <span className="font-semibold text-emerald-600">Tom Atual:</span>
+                                            <span className="font-bold">{targetKey}</span>
+                                            <span className="text-gray-300">|</span>
+                                            <span>Original: {songKey} ({shiftText})</span>
+                                        </p>
+                                    </div>
 
-                            {/* Song Content */}
-                            <div className="text-sm leading-relaxed">
-                                {processChordProSimple(chordProText, songKey, semitoneShift)}
+                                    {/* Song Content */}
+                                    <div className="text-sm sm:text-base leading-relaxed">
+                                        {processChordProSimple(chordProText, songKey, semitoneShift)}
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
