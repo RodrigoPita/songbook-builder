@@ -67,6 +67,9 @@ export const getSemitoneShift = (originalKey, targetKey) => {
 
 // Get target key after transposition
 export function getTargetKeyFromShift(originalKey, shift) {
+    // Preserve the user's spelling (e.g. Ebm instead of canonical D#m) when not transposing
+    if (shift % 12 === 0) return originalKey;
+
     const wasOriginalKeyMinor = isMinorKey(originalKey);
 
     const keyForShiftCalculation = wasOriginalKeyMinor 
