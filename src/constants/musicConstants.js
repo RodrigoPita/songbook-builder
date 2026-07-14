@@ -35,6 +35,10 @@ export const RELATIVE_MINORS = {
     "F#m": "A",
     "Gm":  "Bb",
     "G#m": "B",
+    // Enharmonic spellings, mapped to the relative major's enharmonic
+    // equivalent so the lookup exists in SEMITONE_MAP
+    "Ebm": "Gb",
+    "A#m": "C#",
 };
 
 export const MAJOR_TO_RELATIVE_MINOR = {
